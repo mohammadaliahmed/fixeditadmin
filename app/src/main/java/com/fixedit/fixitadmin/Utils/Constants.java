@@ -6,6 +6,6 @@ package com.fixedit.fixitadmin.Utils;
 
 public class Constants {
 
-
+        public static String FIXEDIT_URL="http://fixedit.services/";
 
 }

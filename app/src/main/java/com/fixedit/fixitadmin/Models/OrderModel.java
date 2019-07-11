@@ -7,6 +7,7 @@ public class OrderModel {
     long time;
     User user;
     ArrayList<ServiceCountModel> countModelArrayList;
+    ArrayList<ServiceCountModel> newCountModelList;
     long totalPrice;
     String instructions;
     String date, chosenTime;
@@ -20,6 +21,7 @@ public class OrderModel {
     boolean assigned;
     String assignedTo;
     String assignedToName;
+    boolean modifiedOrderConfirmed;
 
     public OrderModel(long orderId, long time, User user, ArrayList<ServiceCountModel> countModelArrayList,
                       long totalPrice, long totalHours, String instructions, String date, String chosenTime,
@@ -45,6 +47,22 @@ public class OrderModel {
     }
 
     public OrderModel() {
+    }
+
+    public boolean isModifiedOrderConfirmed() {
+        return modifiedOrderConfirmed;
+    }
+
+    public void setModifiedOrderConfirmed(boolean modifiedOrderConfirmed) {
+        this.modifiedOrderConfirmed = modifiedOrderConfirmed;
+    }
+
+    public ArrayList<ServiceCountModel> getNewCountModelList() {
+        return newCountModelList;
+    }
+
+    public void setNewCountModelList(ArrayList<ServiceCountModel> newCountModelList) {
+        this.newCountModelList = newCountModelList;
     }
 
     public boolean isAssigned() {

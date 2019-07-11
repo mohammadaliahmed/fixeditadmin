@@ -75,7 +75,7 @@ public class ViewInvoice extends AppCompatActivity {
                         timeChosen.setText("Time: " + model.getOrder().getChosenTime());
                         customerName.setText("Customer Name: " + model.getOrder().getUser().getFullName());
                         mobileNumber.setText("Cell Number: " + model.getOrder().getUser().getMobile());
-                        address.setText("Customer Address: " + model.getOrder().getUser().getAddress());
+                        address.setText("Customer Address: " + model.getOrder().getOrderAddress());
                         comments.setText("Comments: " + model.getOrder().getInstructions());
                         total.setText("Total Bill: Rs " + model.getOrder().getTotalPrice());
                         totalTime.setText("Total Time: " + model.getOrder().getTotalHours()+" hours");

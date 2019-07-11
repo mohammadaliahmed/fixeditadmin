@@ -28,6 +28,7 @@ import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Servicemen.ServicemanModel;
 import com.fixedit.fixitadmin.Services.ListOfSubServices;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.Constants;
 import com.fixedit.fixitadmin.Utils.NotificationAsync;
 import com.fixedit.fixitadmin.Utils.NotificationObserver;
 import com.fixedit.fixitadmin.Utils.SharedPrefs;
@@ -66,7 +67,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
     int positionSelected;
     TextView assignedTo;
     CardView assignedLayout;
-    Button viewPictures;
+    Button viewPictures,modifyOrder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,10 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Intent intent = getIntent();
         orderIdFromIntent = intent.getStringExtra("orderId");
+
+        onNewIntent(getIntent());
+
+
         orderId = findViewById(R.id.order_id);
         assignedLayout = findViewById(R.id.assignedLayout);
         assignedTo = findViewById(R.id.assignedTo);
@@ -91,6 +97,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         invoice = findViewById(R.id.invoice);
         assignTo = findViewById(R.id.assignTo);
         viewPictures = findViewById(R.id.viewPictures);
+        modifyOrder = findViewById(R.id.modifyOrder);
 
         username = findViewById(R.id.ship_username);
         phone = findViewById(R.id.ship_phone);
@@ -106,6 +113,16 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         getInvoiceCountFromDB();
         getServicemenFromDB();
 
+
+        modifyOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ViewOrder.this, ModifyOrder.class);
+                i.putExtra("orderId", "" + orderIdFromIntent);
+                i.putExtra("parentService",model.getServiceName());
+                startActivity(i);
+            }
+        });
 
         viewPictures.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +147,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         @Override
                         public void onSuccess(Void aVoid) {
                             CommonUtils.showToast("Order assigned to: " + serviceMenSelected);
+                            CommonUtils.sendMessage(servicemenList.get(positionSelected-1).getMobile(),
+                                    "FIXEDIT \nNew order Assigned\nOrder Id: "+orderIdFromIntent+"\n\nClick to view: \n"+Constants.FIXEDIT_URL+"staff/"+orderIdFromIntent);
                             mDatabase.child("Servicemen").child(servicemenList.get(positionSelected - 1).getId())
                                     .child("assignedOrders").child(orderIdFromIntent)
                                     .setValue(orderIdFromIntent);
@@ -192,6 +211,10 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         recyclerView.setLayoutManager(layoutManager);
 
 
+        getDataFromServer(orderIdFromIntent);
+    }
+
+    private void getDataFromServer(String orderIdFromIntent) {
         mDatabase.child("Orders").child(orderIdFromIntent).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -291,6 +314,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         });
     }
 
+
     private void setupSpinner() {
 
         final String[] items = new String[servicemenList.size() + 1];
@@ -342,7 +366,9 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("Invoices").child("" + billNumber).setValue(new InvoiceModel("" + billNumber, model, System.currentTimeMillis())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("Invoices").child("" + billNumber)
+                        .setValue(new InvoiceModel("" + billNumber, model,
+                                System.currentTimeMillis())).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         updateInvoiceInOrder();
@@ -445,5 +471,18 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    protected void onNewIntent(Intent intent) {
+
+        super.onNewIntent(intent);
+        String action = intent.getAction();
+        String data = intent.getDataString();
+        if (Intent.ACTION_VIEW.equals(action) && data != null) {
+            String adIdFromLink = data.substring(data.lastIndexOf("/") + 1);
+            orderIdFromIntent = adIdFromLink;
+//            getOrderFromServer(orderId);
+        }
     }
 }

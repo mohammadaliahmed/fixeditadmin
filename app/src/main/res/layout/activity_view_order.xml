@@ -520,6 +520,32 @@
                         android:textColor="#fff"
                         android:textSize="12sp" />
                 </LinearLayout>
+            </android.support.v7.widget.CardView> <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/modifyOrder"
+                        android:layout_width="200dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="20dp"
+
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_bg"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:text="Modify Order"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
 

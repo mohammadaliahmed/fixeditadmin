@@ -11,9 +11,17 @@ import android.widget.Toast;
 
 
 import com.fixedit.fixitadmin.ApplicationClass;
+import com.fixedit.fixitadmin.Example;
+import com.fixedit.fixitadmin.RetrofitClient;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by AliAh on 14/05/2018.
@@ -34,6 +42,36 @@ public class CommonUtils {
                 Toast.makeText(ApplicationClass.getInstance().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static void sendMessage(String number, String message) {
+        String request = "https://bulksms.com.pk";
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(request)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        RetrofitClient client = retrofit.create(RetrofitClient.class);
+        Call<Example> call = client.createTask(
+                "923458441448",
+                "5214",
+                "FIXEDIT"
+                , number,
+                message
+        );
+        call.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Call<Example> call, Response<Example> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Example> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public static String getFormattedPrice(Object price) {

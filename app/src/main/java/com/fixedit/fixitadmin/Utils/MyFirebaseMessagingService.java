@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.fixedit.fixitadmin.Activities.MainActivity;
 import com.fixedit.fixitadmin.Activities.Orders.Orders;
+import com.fixedit.fixitadmin.Activities.Orders.ViewOrder;
 import com.fixedit.fixitadmin.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -73,7 +74,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (type.equalsIgnoreCase("order")) {
             resultIntent = new Intent(this, Orders.class);
 
-        } else {
+        }else if (type.equalsIgnoreCase("modify")) {
+            resultIntent = new Intent(this, ViewOrder.class);
+            resultIntent.putExtra("orderId",Id);
+
+        }
+        else {
 
             resultIntent = new Intent(this, MainActivity.class);
 

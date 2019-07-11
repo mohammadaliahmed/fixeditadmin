@@ -43,7 +43,7 @@ public class BillsAdapter extends RecyclerView.Adapter<BillsAdapter.ViewHolder> 
                 + "\n\nBill Time: " + CommonUtils.getFormattedDate(model.getTime())
         );
         holder.userDetails.setText("Name: " + model.getOrder().getUser().getFullName()
-                + "\n\nAddress: " + model.getOrder().getUser().getAddress()
+                + "\n\nAddress: " + model.getOrder().getOrderAddress()
                 + "\n\nPhone: " + model.getOrder().getUser().getMobile()
 
         );
