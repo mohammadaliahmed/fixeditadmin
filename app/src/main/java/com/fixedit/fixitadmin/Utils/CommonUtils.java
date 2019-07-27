@@ -45,32 +45,32 @@ public class CommonUtils {
     }
 
     public static void sendMessage(String number, String message) {
-        String request = "https://bulksms.com.pk";
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(request)
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        RetrofitClient client = retrofit.create(RetrofitClient.class);
-        Call<Example> call = client.createTask(
-                "923458441448",
-                "5214",
-                "FIXEDIT"
-                , number,
-                message
-        );
-        call.enqueue(new Callback<Example>() {
-            @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<Example> call, Throwable t) {
-
-            }
-        });
+//        String request = "https://bulksms.com.pk";
+//
+//        Retrofit.Builder builder = new Retrofit.Builder()
+//                .baseUrl(request)
+//                .addConverterFactory(GsonConverterFactory.create());
+//
+//        Retrofit retrofit = builder.build();
+//        RetrofitClient client = retrofit.create(RetrofitClient.class);
+//        Call<Example> call = client.createTask(
+//                "923458441448",
+//                "5214",
+//                "FIXEDIT"
+//                , number,
+//                message
+//        );
+//        call.enqueue(new Callback<Example>() {
+//            @Override
+//            public void onResponse(Call<Example> call, Response<Example> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Example> call, Throwable t) {
+//
+//            }
+//        });
 
     }
 
@@ -104,7 +104,29 @@ public class CommonUtils {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeInMillis(smsTimeInMilis);
 
-        return DateFormat.format("dd-MMM-yyyy", smsTime).toString();
+        return DateFormat.format("dd-MMM-yyyy, h:mm:aa", smsTime).toString();
+
+    }
+
+    public static String getDay(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("dd", smsTime).toString();
+
+    }
+
+    public static String getMonth(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("MM", smsTime).toString();
+
+    }public static String getYear(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("yyyy", smsTime).toString();
 
     }
 
@@ -123,8 +145,6 @@ public class CommonUtils {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
-
-
 
 
 }

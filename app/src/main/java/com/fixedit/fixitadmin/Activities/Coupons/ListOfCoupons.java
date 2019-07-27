@@ -1,5 +1,4 @@
-package com.fixedit.fixitadmin.Servicemen;
-
+package com.fixedit.fixitadmin.Activities.Coupons;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,8 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.fixedit.fixitadmin.R;
-
-import com.fixedit.fixitadmin.Services.SubServiceModel;
+import com.fixedit.fixitadmin.Services.AddService;
+import com.fixedit.fixitadmin.Services.ServiceListAdapter;
+import com.fixedit.fixitadmin.Services.ServiceModel;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,60 +26,57 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ListOfServicemen extends AppCompatActivity {
-    ImageView addServicemen;
+public class ListOfCoupons extends AppCompatActivity {
+    ImageView addService;
     RecyclerView recyclerview;
-    ServicemanListAdapter adapter;
-    private ArrayList<ServicemanModel> itemList = new ArrayList<>();
+    CouponsListAdapter adapter;
+    private ArrayList<CouponModel> itemList = new ArrayList<>();
     DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_servicemen);
-        addServicemen = findViewById(R.id.addServicemen);
+        setContentView(R.layout.activity_list_services);
+        addService = findViewById(R.id.addService);
         recyclerview = findViewById(R.id.recyclerview);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        this.setTitle("Servicemen");
-
+        this.setTitle("List of Coupons");
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        addServicemen.setOnClickListener(new View.OnClickListener() {
+        addService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListOfServicemen.this, AddServicemen.class);
-                startActivity(i);
+                startActivity(new Intent(ListOfCoupons.this, AddCoupon.class));
             }
 
         });
 
 
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new ServicemanListAdapter(this, itemList, new ServicemanListAdapter.ServicemenListAdapterCallbacks() {
+        adapter = new CouponsListAdapter(this, itemList, new CouponsListAdapter.CouponsListAdapterCallbacks() {
             @Override
-            public void onServicemanStatusChanged(ServicemanModel model, final boolean value) {
-                mDatabase.child("Servicemen").child(model.getId()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+            public void onCouponStatusChanged(CouponModel model, final boolean value) {
+                mDatabase.child("Coupons").child(model.getCouponId()).child("active")
+                        .setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (value) {
-                            CommonUtils.showToast("Serviceman activated");
+                            CommonUtils.showToast("Coupon activated");
                         } else {
-                            CommonUtils.showToast("Serviceman Deactivated");
+                            CommonUtils.showToast("Coupon Deactivated");
                         }
                     }
                 });
             }
 
             @Override
-            public void onServicemanDeleted(ServicemanModel model) {
+            public void onCouponDeleted(CouponModel model) {
                 showAlert(model);
             }
         });
-
-
         recyclerview.setAdapter(adapter);
 
         getDataFromDB();
@@ -87,16 +84,15 @@ public class ListOfServicemen extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("Servicemen").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Coupons").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     itemList.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        ServicemanModel model = snapshot.getValue(ServicemanModel.class);
+                        CouponModel model = snapshot.getValue(CouponModel.class);
                         if (model != null) {
                             itemList.add(model);
-
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -113,19 +109,19 @@ public class ListOfServicemen extends AppCompatActivity {
         });
     }
 
-    private void showAlert(final ServicemanModel model) {
+    private void showAlert(final CouponModel model) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert");
-        builder.setMessage("Do you want to delete this? ");
+        builder.setMessage("Do you want to delete this Coupon? ");
 
         // add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("Servicemen").child(model.getUsername()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("Coupons").child(model.getCouponId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        CommonUtils.showToast("Serviceman Deleted");
+                        CommonUtils.showToast("Coupon Deleted");
                     }
                 });
 

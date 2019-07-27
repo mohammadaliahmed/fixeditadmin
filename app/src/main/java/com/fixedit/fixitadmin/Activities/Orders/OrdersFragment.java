@@ -3,6 +3,7 @@ package com.fixedit.fixitadmin.Activities.Orders;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 import com.fixedit.fixitadmin.Models.OrderModel;
@@ -29,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 
 public class OrdersFragment extends Fragment {
@@ -102,11 +107,10 @@ public class OrdersFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Order Marked as Under Process");
-//                        adapter.notifyDataSetChanged();
-//                        NotificationAsync notificationAsync = new NotificationAsync(context);
-//                        String notification_title = "You order has been accepted ";
-//                        String notification_message = "Click to view";
-//                        notificationAsync.execute("ali", order.getCustomer().getFcmKey(), notification_title, notification_message, "Order", "abc");
+                        NotificationAsync notificationAsync = new NotificationAsync(context);
+                        String notification_title = "You order has been accepted ";
+                        String notification_message = "Click to view";
+                        notificationAsync.execute("ali", order.getUser().getFcmKey(), notification_title, notification_message, "Order", "abc");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -125,34 +129,53 @@ public class OrdersFragment extends Fragment {
     }
 
     private void showCancelDilog(final OrderModel order) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Alert");
-        builder.setMessage("Do you want to cancel this order? ");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("Cancel Order?");
+        alertDialog.setMessage("Enter reason..");
 
-        // add the buttons
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("Orders").child(""+order.getOrderId()).child("orderStatus").setValue("Cancelled").addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        CommonUtils.showToast("Order Cancelled");
-                        adapter.notifyDataSetChanged();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+        final EditText input = new EditText(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+        alertDialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("cancelReason", input.getText().toString());
+                        map.put("cancelled", true);
+                        map.put("orderStatus", "Cancelled");
 
+                        mDatabase.child("Orders").child("" + order.getOrderId()).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                CommonUtils.showToast("Order Cancelled");
+                                adapter.notifyDataSetChanged();
+                                NotificationAsync notificationAsync = new NotificationAsync(context);
+                                String notification_title = "You order has been cancelled ";
+                                String notification_message = "Reason: "+input.getText().toString();
+                                notificationAsync.execute("ali", order.getUser().getFcmKey(), notification_title, notification_message, "Order", "abc");
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
                     }
                 });
 
-            }
-        });
-        builder.setNegativeButton("Cancel", null);
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        alertDialog.show();
+
 
     }
 
@@ -161,7 +184,7 @@ public class OrdersFragment extends Fragment {
         super.onResume();
         getDataFromServer();
     }
-    // setup the alert builder
+// setup the alert builder
 
 
     private void getDataFromServer() {

@@ -23,6 +23,24 @@ public class OrderModel {
     String assignedToName;
     boolean modifiedOrderConfirmed;
 
+    boolean arrived;
+    long materialBill;
+    long jobEndTime;
+    boolean jobDone;
+    boolean jobFinish;
+    boolean jobStarted;
+    long jobStartTime;
+
+    boolean rated;
+    float rating;
+    boolean couponApplied;
+    String couponCode;
+    int discount;
+    long serviceCharges;
+    boolean cancelled;
+    String cancelReason;
+
+
     public OrderModel(long orderId, long time, User user, ArrayList<ServiceCountModel> countModelArrayList,
                       long totalPrice, long totalHours, String instructions, String date, String chosenTime,
                       String orderStatus, String orderAddress, String googleAddress,
@@ -46,7 +64,127 @@ public class OrderModel {
         this.serviceName = serviceName;
     }
 
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public long getServiceCharges() {
+        return serviceCharges;
+    }
+
+    public void setServiceCharges(long serviceCharges) {
+        this.serviceCharges = serviceCharges;
+    }
+
+    public boolean isCouponApplied() {
+        return couponApplied;
+    }
+
+    public void setCouponApplied(boolean couponApplied) {
+        this.couponApplied = couponApplied;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
     public OrderModel() {
+    }
+
+    public boolean isArrived() {
+        return arrived;
+    }
+
+    public boolean isRated() {
+        return rated;
+    }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public void setArrived(boolean arrived) {
+        this.arrived = arrived;
+    }
+
+    public long getMaterialBill() {
+        return materialBill;
+    }
+
+    public void setMaterialBill(long materialBill) {
+        this.materialBill = materialBill;
+    }
+
+    public long getJobEndTime() {
+        return jobEndTime;
+    }
+
+    public void setJobEndTime(long jobEndTime) {
+        this.jobEndTime = jobEndTime;
+    }
+
+    public boolean isJobDone() {
+        return jobDone;
+    }
+
+    public void setJobDone(boolean jobDone) {
+        this.jobDone = jobDone;
+    }
+
+    public boolean isJobFinish() {
+        return jobFinish;
+    }
+
+    public void setJobFinish(boolean jobFinish) {
+        this.jobFinish = jobFinish;
+    }
+
+    public boolean isJobStarted() {
+        return jobStarted;
+    }
+
+    public void setJobStarted(boolean jobStarted) {
+        this.jobStarted = jobStarted;
+    }
+
+    public long getJobStartTime() {
+        return jobStartTime;
+    }
+
+    public void setJobStartTime(long jobStartTime) {
+        this.jobStartTime = jobStartTime;
     }
 
     public boolean isModifiedOrderConfirmed() {

@@ -59,7 +59,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
     String userFcmKey;
     ImageView invoice;
     Spinner spinner;
-    CardView assignToLayout;
+    CardView assignToLayout, modifyLayout;
 
     Button assignTo;
     private String serviceMenSelected;
@@ -67,8 +67,10 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
     int positionSelected;
     TextView assignedTo;
     CardView assignedLayout;
-    Button viewPictures,modifyOrder;
+    Button viewPictures, modifyOrder;
 
+    Button reAssign;
+    TextView buildingType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +88,14 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         onNewIntent(getIntent());
 
 
+        reAssign = findViewById(R.id.reAssign);
         orderId = findViewById(R.id.order_id);
+        buildingType = findViewById(R.id.buildingType);
         assignedLayout = findViewById(R.id.assignedLayout);
         assignedTo = findViewById(R.id.assignedTo);
         assignToLayout = findViewById(R.id.assignToLayout);
         spinner = findViewById(R.id.spinner);
+        modifyLayout = findViewById(R.id.modifyLayout);
         orderTime = findViewById(R.id.order_time);
         serviceName = findViewById(R.id.serviceName);
         price = findViewById(R.id.order_price);
@@ -119,7 +124,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
             public void onClick(View v) {
                 Intent i = new Intent(ViewOrder.this, ModifyOrder.class);
                 i.putExtra("orderId", "" + orderIdFromIntent);
-                i.putExtra("parentService",model.getServiceName());
+                i.putExtra("parentService", model.getServiceName());
                 startActivity(i);
             }
         });
@@ -132,6 +137,15 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                 startActivity(i);
             }
         });
+        reAssign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                assignedLayout.setVisibility(View.GONE);
+                assignToLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+
 
         assignTo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,8 +161,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         @Override
                         public void onSuccess(Void aVoid) {
                             CommonUtils.showToast("Order assigned to: " + serviceMenSelected);
-                            CommonUtils.sendMessage(servicemenList.get(positionSelected-1).getMobile(),
-                                    "FIXEDIT \nNew order Assigned\nOrder Id: "+orderIdFromIntent+"\n\nClick to view: \n"+Constants.FIXEDIT_URL+"staff/"+orderIdFromIntent);
+                            CommonUtils.sendMessage(servicemenList.get(positionSelected - 1).getMobile(),
+                                    "FIXEDIT \nNew order Assigned\nOrder Id: " + orderIdFromIntent + "\n\nClick to view: \n" + Constants.FIXEDIT_URL + "staff/" + orderIdFromIntent);
                             mDatabase.child("Servicemen").child(servicemenList.get(positionSelected - 1).getId())
                                     .child("assignedOrders").child(orderIdFromIntent)
                                     .setValue(orderIdFromIntent);
@@ -226,6 +240,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         serviceName.setText("" + model.getServiceName());
                         price.setText("Rs " + model.getTotalPrice());
                         username.setText("" + model.getUser().getFullName());
+                        buildingType.setText("" + model.getBuildingType());
                         phone.setText("" + model.getUser().getMobile());
                         address.setText(model.getOrderAddress());
 //                        city.setText(model.getUser().getAddress());
@@ -240,12 +255,13 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                             orderCompleted.setVisibility(View.GONE);
                             underProcess.setVisibility(View.VISIBLE);
                             assignToLayout.setVisibility(View.VISIBLE);
-
+                            invoice.setVisibility(View.GONE);
 
                         } else if (model.getOrderStatus().equalsIgnoreCase("under process") && !model.isAssigned()) {
                             orderCompleted.setVisibility(View.VISIBLE);
                             assignToLayout.setVisibility(View.VISIBLE);
-                            invoice.setVisibility(View.GONE);
+                            invoice.setVisibility(View.VISIBLE);
+
 
                         } else if (model.getOrderStatus().equalsIgnoreCase("under process") && model.isAssigned()) {
                             invoice.setVisibility(View.VISIBLE);
@@ -269,7 +285,14 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                             underProcess.setVisibility(View.GONE);
                             orderCompleted.setVisibility(View.GONE);
                             assignToLayout.setVisibility(View.GONE);
+                            invoice.setVisibility(View.VISIBLE);
+
                         }
+                        if (model.isJobFinish() || model.isJobDone()) {
+                            modifyLayout.setVisibility(View.GONE);
+                            invoice.setVisibility(View.VISIBLE);
+                        }
+
 //                        Toast.makeText(ViewOrder.this, ""+list, Toast.LENGTH_SHORT).show();
 //                        adapter.notifyDataSetChanged();
 
@@ -421,7 +444,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Order marked as " + message);
-                        invoice.setVisibility(View.GONE);
+//                        invoice.setVisibility(View.GONE);
                         NotificationAsync notificationAsync = new NotificationAsync(ViewOrder.this);
                         String notification_title = "You order is " + message;
                         String notification_message = "Click to view";

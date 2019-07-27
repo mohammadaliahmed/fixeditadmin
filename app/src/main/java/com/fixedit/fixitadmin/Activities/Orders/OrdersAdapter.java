@@ -87,9 +87,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
 
                     getFullName()
                     + "\n\nAddress: " + model.getOrderAddress()
-                    + "\n\nPhone: " + model.getUser().
-
-                    getPhone()
+                    + "\n\nPhone: " + model.getUser().getPhone()
+                    + "\n\nBuilding: " + model.getBuildingType()
 
             );
             holder.itemView.setOnClickListener(new View.OnClickListener()
@@ -98,7 +97,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent(context, ViewOrder.class);
-                    i.putExtra("orderId", ""+model.getOrderId());
+                    i.putExtra("orderId", "" + model.getOrderId());
                     context.startActivity(i);
                 }
             });

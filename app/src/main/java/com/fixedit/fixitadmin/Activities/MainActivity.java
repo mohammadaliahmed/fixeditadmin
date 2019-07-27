@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.fixedit.fixitadmin.Activities.Coupons.ListOfCoupons;
 import com.fixedit.fixitadmin.Activities.Orders.Orders;
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Servicemen.ListOfServicemen;
@@ -78,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AppSettings.class));
+
+            }
+        });
+        coupons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ListOfCoupons.class));
 
             }
         });

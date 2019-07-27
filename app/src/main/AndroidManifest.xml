@@ -24,6 +24,9 @@
         <activity android:name=".Services.ListOfServices"/>
         <activity android:name=".Services.AddSubService"/>
         <activity android:name=".Services.ListOfSubServices"/>
+        <activity android:name=".Activities.Coupons.ListOfCoupons"/>
+        <activity android:name=".Activities.Coupons.AddCoupon"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Activities.Orders.Orders"/>
         <activity android:name=".Activities.Orders.ViewOrder">
             <intent-filter>
@@ -42,6 +45,8 @@
         <activity android:name=".Activities.ListOfBills"/>
         <activity android:name=".Activities.ViewServicePictures"/>
         <activity android:name=".Activities.Orders.ModifyOrder"/>
+        <activity android:name=".Activities.ExportOrders"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Activities.AppSettings"/>
         <activity android:name=".Activities.PicturesSlider"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -59,6 +64,15 @@
             </intent-filter>
         </service>
 
+        <provider
+            android:name=".provider.GenericFileProvider"
+            android:authorities="com.fixedit.fixitadmin.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

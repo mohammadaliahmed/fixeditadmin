@@ -8,11 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fixedit.fixitadmin.Activities.ExportOrders;
 import com.fixedit.fixitadmin.Activities.MainActivity;
 import com.fixedit.fixitadmin.R;
+import com.fixedit.fixitadmin.Utils.NotificationObserver;
 
 
-public class Orders extends AppCompatActivity {
+public class Orders extends AppCompatActivity implements NotificationObserver {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,10 @@ public class Orders extends AppCompatActivity {
             Intent i = new Intent(Orders.this, MainActivity.class);
             startActivity(i);
             finish();
+        }  if (item.getItemId() == R.id.action_export) {
+            Intent i = new Intent(Orders.this, ExportOrders.class);
+            startActivity(i);
+//            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -56,6 +62,18 @@ public class Orders extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.orders_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onSuccess(String chatId) {
+        
+    }
+
+    @Override
+    public void onFailure() {
+
     }
 }
