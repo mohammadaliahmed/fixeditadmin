@@ -7,11 +7,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.fixedit.fixitadmin.Models.InvoiceModel;
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ListOfServices extends AppCompatActivity {
     ImageView addService;
@@ -40,6 +44,7 @@ public class ListOfServices extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("List of services");
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -50,13 +55,14 @@ public class ListOfServices extends AppCompatActivity {
             }
 
         });
+        addService.setVisibility(View.GONE);
 
 
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new ServiceListAdapter(this, itemList, new ServiceListAdapter.ServiceListAdapterCallbacks() {
             @Override
             public void onServiceStatusChanged(ServiceModel model, final boolean value) {
-                mDatabase.child("Services").child(model.getName()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("Services").child(model.getId()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (value) {
@@ -72,7 +78,19 @@ public class ListOfServices extends AppCompatActivity {
             public void onServiceDeleted(ServiceModel model) {
                 showAlert(model);
             }
+
+            @Override
+            public void onPositionChanged(ServiceModel model, int position) {
+                mDatabase.child("Services").child(model.getId()).child("position").setValue(position).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Position updated");
+                    }
+                });
+            }
+
         });
+
         recyclerview.setAdapter(adapter);
 
         getDataFromDB();
@@ -83,16 +101,27 @@ public class ListOfServices extends AppCompatActivity {
         mDatabase.child("Services").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null){
+                if (dataSnapshot.getValue() != null) {
                     itemList.clear();
-                    for (DataSnapshot snapshot:dataSnapshot.getChildren()){
-                        ServiceModel model=snapshot.getValue(ServiceModel.class);
-                        if(model!=null){
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        ServiceModel model = snapshot.getValue(ServiceModel.class);
+                        if (model != null) {
                             itemList.add(model);
                         }
                     }
+                    Collections.sort(itemList, new Comparator<ServiceModel>() {
+                        @Override
+                        public int compare(ServiceModel listData, ServiceModel t1) {
+                            Integer ob1 = listData.getPosition();
+                            Integer ob2 = t1.getPosition();
+
+                            return ob1.compareTo(ob2);
+
+                        }
+                    });
+
                     adapter.notifyDataSetChanged();
-                }else{
+                } else {
                     itemList.clear();
                     adapter.notifyDataSetChanged();
                 }
@@ -114,7 +143,7 @@ public class ListOfServices extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("Services").child(model.getName()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("Services").child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Services Deleted");
@@ -132,6 +161,7 @@ public class ListOfServices extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.service_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -142,7 +172,9 @@ public class ListOfServices extends AppCompatActivity {
 
             finish();
         }
-
+        if (item.getItemId() == R.id.action_add) {
+            startActivity(new Intent(ListOfServices.this, AddService.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 

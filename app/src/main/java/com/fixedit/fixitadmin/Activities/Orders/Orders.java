@@ -25,7 +25,7 @@ public class Orders extends AppCompatActivity implements NotificationObserver {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setElevation(0);
         }
-        this.setTitle("Orders");
+        this.setTitle("Bookings");
         ViewPager viewPager = findViewById(R.id.viewpager);
         SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(this, getSupportFragmentManager());
 

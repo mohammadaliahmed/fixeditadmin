@@ -82,7 +82,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             resultIntent = new Intent(this, ViewOrder.class);
             resultIntent.putExtra("orderId", Id);
 
-        }else if (type.equalsIgnoreCase("paymentReceived")) {
+        } else if (type.equalsIgnoreCase("jobStart")) {
+            resultIntent = new Intent(this, ViewOrder.class);
+            resultIntent.putExtra("orderId", Id);
+
+        } else if (type.equalsIgnoreCase("paymentReceived")) {
             resultIntent = new Intent(this, ViewOrder.class);
             resultIntent.putExtra("orderId", Id);
 

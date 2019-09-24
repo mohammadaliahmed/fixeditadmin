@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import com.fixedit.fixitadmin.ApplicationClass;
 import com.fixedit.fixitadmin.Models.User;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -19,6 +23,22 @@ public class SharedPrefs {
 
     private SharedPrefs() {
 
+    }
+
+
+    public static void setServicesList(List<String> itemList) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemList);
+        preferenceSetter("services", json);
+    }
+
+    public static ArrayList getServicesList() {
+        Gson gson = new Gson();
+        ArrayList<String> playersList = (ArrayList<String>) gson.fromJson(preferenceGetter("services"),
+                new TypeToken<ArrayList<String>>() {
+                }.getType());
+        return playersList;
     }
 
 
@@ -88,8 +108,6 @@ public class SharedPrefs {
         User customer = gson.fromJson(preferenceGetter("customerModel"), User.class);
         return customer;
     }
-
-
 
 
     public static void preferenceSetter(String key, String value) {

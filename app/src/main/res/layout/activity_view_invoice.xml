@@ -150,6 +150,34 @@
                         android:padding="8dp"
                         android:textColor="#000"
                         android:textSize="11sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/serviceName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/buildingType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -168,6 +196,7 @@
                         android:textColor="#000"
                         android:textSize="11sp" />
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -221,12 +250,12 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:visibility="gone"
                         android:text="Q*P"
-
                         android:textColor="#000"
+
                         android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -234,13 +263,13 @@
                         android:layout_weight="1.5"
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:padding="8dp"
                         android:text="T.Price"
-
                         android:textColor="#000"
+
                         android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
@@ -249,6 +278,38 @@
                     android:layout_height="wrap_content">
 
                 </android.support.v7.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/couponArea"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:weightSum="2">
+
+
+                    <TextView
+                        android:id="@+id/couponCode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/discount"
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -269,6 +330,75 @@
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/perHourCost"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:textColor="#000"
+                        android:textSize="11sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:id="@+id/materialBill"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Mat.bill Rs 500"
+                        android:textColor="#000"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/materialPercent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+
+                        android:text="10% Mat. Bill : Rs 100"
+                        android:textColor="#000"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tax"
+                        android:layout_width="0dp"
+
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/cell_shape"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Tax: 2%"
+                        android:textColor="#000"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+
+                    <TextView
                         android:id="@+id/total"
                         android:layout_width="0dp"
 
@@ -278,7 +408,7 @@
                         android:gravity="center"
                         android:padding="8dp"
                         android:textColor="#000"
-                        android:textSize="11sp" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 

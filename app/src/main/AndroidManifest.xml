@@ -20,11 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Services.AddService"/>
+        <activity android:name=".Services.AddService"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Services.ListOfServices"/>
-        <activity android:name=".Services.AddSubService"/>
+        <activity android:name=".Services.AddSubService"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Services.ListOfSubServices"/>
+        <activity android:name=".Activities.TimeSlotManagement.TimeSlotList"/>
         <activity android:name=".Activities.Coupons.ListOfCoupons"/>
+        <activity android:name=".Activities.Customers.ListOfCustomers"/>
+        <activity android:name=".Activities.Customers.ViewCustomer"/>
         <activity android:name=".Activities.Coupons.AddCoupon"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Activities.Orders.Orders"/>
@@ -41,18 +46,25 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ViewInvoice"/>
+        <activity android:name=".Activities.ViewInvoice"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activities.ListOfBills"/>
         <activity android:name=".Activities.ViewServicePictures"/>
         <activity android:name=".Activities.Orders.ModifyOrder"/>
         <activity android:name=".Activities.ExportOrders"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Activities.AppSettings"/>
+        <activity android:name=".Activities.AppSettings"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Activities.PicturesSlider"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Servicemen.ListOfServicemen"/>
         <activity android:name=".Servicemen.AddServicemen"
             android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ChangePolicy"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Notifications.SendNotification" />
+        <activity android:name=".Notifications.NotificationHistory" />
+
         <service android:name=".Utils.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

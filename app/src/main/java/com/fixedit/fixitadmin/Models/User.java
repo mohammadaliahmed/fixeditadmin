@@ -1,12 +1,17 @@
 package com.fixedit.fixitadmin.Models;
 
+import java.util.HashMap;
+
 public class User {
     String firstname, lastname, username, password, email, mobile, phone, address, fcmKey;
     long time;
     boolean numberVerified;
     String fullName;
     String googleAddress;
-    double lat,lon;
+    double lat, lon;
+    HashMap<String, String> orders;
+
+    long totalOrder, totalPayment;
 
     public User(String firstname, String lastname, String username, String password,
                 String email, String mobile, String phone,
@@ -25,6 +30,31 @@ public class User {
     }
 
     public User() {
+    }
+
+
+    public long getTotalOrder() {
+        return totalOrder;
+    }
+
+    public void setTotalOrder(long totalOrder) {
+        this.totalOrder = totalOrder;
+    }
+
+    public long getTotalPayment() {
+        return totalPayment;
+    }
+
+    public void setTotalPayment(long totalPayment) {
+        this.totalPayment = totalPayment;
+    }
+
+    public HashMap<String, String> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(HashMap<String, String> orders) {
+        this.orders = orders;
     }
 
     public void setFullName(String fullName) {

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
@@ -94,6 +95,7 @@ public class CompressImage {
             Canvas canvas;
             if (scaledBitmap != null) {
                 canvas = new Canvas(scaledBitmap);
+                canvas.drawColor(Color.WHITE);
                 canvas.setMatrix(scaleMatrix);
                 canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
             }
@@ -127,7 +129,7 @@ public class CompressImage {
             try {
                 out = new FileOutputStream(filename);
                 if (scaledBitmap != null) {
-                    scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                    scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
                 }
 
             } catch (FileNotFoundException e) {
@@ -145,7 +147,7 @@ public class CompressImage {
         if (!file.exists()) {
             file.mkdirs();
         }
-        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + ".png");
+        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + ".jpg");
         return uriSting;
 
     }

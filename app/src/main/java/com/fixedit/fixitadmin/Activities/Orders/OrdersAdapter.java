@@ -75,10 +75,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
                 }
             });
 
-            holder.orderDetails.setText("Order Id: " + model.getOrderId()
-                    + "\n\nOrder Time: " + CommonUtils.getFormattedDate(model.getTime())
-                    + "\n\nOrder Status: " + model.getOrderStatus()
-                    + "\n\nOrder Items: " + model.getCountModelArrayList().
+            holder.orderDetails.setText("Service Id: " + model.getOrderId()
+                    + "\n\nService Time: " + CommonUtils.getFormattedDate(model.getTime())
+                    + "\n\nService Status: " + model.getOrderStatus()
+                    + "\n\nService Items: " + model.getCountModelArrayList().
 
                     size()
                     + "\n\nOrder Amount: Rs." + model.getTotalPrice()

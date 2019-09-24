@@ -26,6 +26,7 @@ import com.fixedit.fixitadmin.Models.OrderModel;
 import com.fixedit.fixitadmin.Models.ServiceCountModel;
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -222,14 +223,15 @@ public class ExportOrders extends AppCompatActivity {
             writer = new CSVWriter(new FileWriter(csv));
 
             List<String[]> data = new ArrayList<String[]>();
-            data.add(new String[]{"Order #", "Date", "Client Name", "Client Address", "Client Lat", "Client Long",
+            data.add(new String[]{"Order #", "Order Status", "Date", "Client Name", "Client Address", "Client Lat", "Client Long",
                     "Services delivered", "Material Bill Amount", "MB charges 10%",
-                    "Time consumed", "Service charges", "Tax(s)", "Serviceman", "Rating",
+                    "Time consumed", "Service charges", "Tax(s)", "Serviceman", "Distance", "Rating",
                     "Coupon", "Discount applied", "Total Bill"});
             for (OrderModel model : itemList) {
                 if (model.getOrderId() > IntStartDate && model.getOrderId() < IntEndDate) {
                     data.add(new String[]{
                             "" + model.getOrderId(),
+                            "" + model.getOrderStatus(),
                             "" + CommonUtils.getFormattedDateOnly(model.getTime()),
                             model.getUser().getFullName(),
                             model.getOrderAddress(),
@@ -239,9 +241,10 @@ public class ExportOrders extends AppCompatActivity {
                             "Rs " + model.getMaterialBill(),
                             "Rs " + (model.getMaterialBill() / 10),
                             "" + model.getTotalHours() + " hrs",
-                           "Rs "+ model.getServiceCharges(),
+                            "Rs " + model.getServiceCharges(),
                             "" + 0,
                             model.getAssignedToName(),
+                            calculateDistance(model),
                             "" + model.getRating(),
                             model.getCouponCode(),
                             model.getDiscount() + " %",
@@ -266,6 +269,16 @@ public class ExportOrders extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String calculateDistance(OrderModel model) {
+        double abc = CommonUtils.distance(
+                model.getStartJourneyLat(),
+                model.getStartJourneyLng(),
+                model.getEndJourneyLat(),
+                model.getEndJourneyLng()
+        );
+        return ("" + abc);
     }
 
     private String getMimeType(String url) {

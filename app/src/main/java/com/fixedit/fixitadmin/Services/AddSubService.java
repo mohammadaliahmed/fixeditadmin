@@ -51,7 +51,8 @@ public class AddSubService extends AppCompatActivity {
 
 
     String id;
-    private String parentService;
+    private String parentServiceId;
+    private String parentServiceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +61,15 @@ public class AddSubService extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
+
         }
         this.setTitle("Add Sub Service");
         getPermissions();
 
         id = getIntent().getStringExtra("id");
-        parentService = getIntent().getStringExtra("parentService");
+        parentServiceId = getIntent().getStringExtra("parentServiceId");
+        parentServiceName = getIntent().getStringExtra("parentServiceName");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         update = findViewById(R.id.update);
@@ -140,21 +144,21 @@ public class AddSubService extends AppCompatActivity {
     }
 
     private void sendDataToDB() {
-
+         id=mDatabase.push().getKey();
 
         SubServiceModel model = new SubServiceModel(
-                serviceName.getText().toString(),
+                id,
                 serviceName.getText().toString(),
                 true,
                 Integer.parseInt(serviceHour.getText().toString()),
                 Integer.parseInt(serviceMinute.getText().toString()),
-                parentService,
+                parentServiceId,
                 0, 10,
                 measureUnit.getText().toString()
         );
 
 
-        mDatabase.child("SubServices").child(serviceName.getText().toString()).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("SubServices").child(id).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 CommonUtils.showToast("Updated");

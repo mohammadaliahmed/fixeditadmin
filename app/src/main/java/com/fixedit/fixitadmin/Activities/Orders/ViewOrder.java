@@ -71,6 +71,9 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
 
     Button reAssign;
     TextView buildingType;
+    private boolean reassignJob;
+
+    TextView instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        this.setTitle("Order View");
+        this.setTitle("Service details");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Intent intent = getIntent();
         orderIdFromIntent = intent.getStringExtra("orderId");
@@ -89,6 +92,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
 
 
         reAssign = findViewById(R.id.reAssign);
+        instructions = findViewById(R.id.instructions);
         orderId = findViewById(R.id.order_id);
         buildingType = findViewById(R.id.buildingType);
         assignedLayout = findViewById(R.id.assignedLayout);
@@ -140,55 +144,37 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         reAssign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (model.isAssigned()) {
+                    reassignJob = true;
+                }
                 assignedLayout.setVisibility(View.GONE);
                 assignToLayout.setVisibility(View.VISIBLE);
             }
         });
 
 
-
         assignTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (serviceMenSelected.equalsIgnoreCase("select serviceman")) {
                     CommonUtils.showToast("Please select serviceman");
                 } else {
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("assigned", true);
-                    map.put("assignedTo", servicemenList.get(positionSelected - 1).getId());
-                    map.put("assignedToName", servicemenList.get(positionSelected - 1).getName());
-                    mDatabase.child("Orders").child(orderIdFromIntent).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            CommonUtils.showToast("Order assigned to: " + serviceMenSelected);
-                            CommonUtils.sendMessage(servicemenList.get(positionSelected - 1).getMobile(),
-                                    "FIXEDIT \nNew order Assigned\nOrder Id: " + orderIdFromIntent + "\n\nClick to view: \n" + Constants.FIXEDIT_URL + "staff/" + orderIdFromIntent);
-                            mDatabase.child("Servicemen").child(servicemenList.get(positionSelected - 1).getId())
-                                    .child("assignedOrders").child(orderIdFromIntent)
-                                    .setValue(orderIdFromIntent);
-                            NotificationAsync notificationAsync = new NotificationAsync(ViewOrder.this);
-                            String notification_title = "New order assigned";
-                            String notification_message = "Click to view";
-                            notificationAsync.execute("ali", servicemenList.get(positionSelected - 1).getFcmKey(), notification_title, notification_message, "Order", "" + orderId);
-
-                        }
-                    });
+                    if (reassignJob) {
+                        mDatabase.child("Servicemen").child(model.getAssignedTo()).child("assignedOrders").child(orderIdFromIntent).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                assignJob();
+                            }
+                        });
+                    } else {
+                        assignJob();
+                    }
 
 
                 }
             }
         });
-
-//        viewOnMap.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                String uri = "http://maps.google.com/maps?saddr=" + 31.5123929  + "," + 74.2144306 + "&daddr=" + model.getLat() + "," +model.getLon() ;
-//                String uri = "https://maps.google.com/?daddr=" + model.getLat() + "," + model.getLon();
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-//                intent.setPackage("com.google.android.apps.maps");
-//                startActivity(intent);
-//            }
-//        });
 
 
         orderCompleted.setOnClickListener(new View.OnClickListener() {
@@ -228,6 +214,35 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         getDataFromServer(orderIdFromIntent);
     }
 
+    public void assignJob() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("assigned", true);
+        map.put("assignedTo", servicemenList.get(positionSelected - 1).getId());
+        map.put("assignedToName", servicemenList.get(positionSelected - 1).getName());
+        mDatabase.child("Orders").child(orderIdFromIntent).updateChildren(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Order assigned to: " + serviceMenSelected);
+                        CommonUtils.sendMessage(servicemenList.get(positionSelected - 1).getMobile(),
+                                "FIXEDIT \nNew order Assigned\nOrder Id: " + orderIdFromIntent + "\n\nClick to view: \n" + Constants.FIXEDIT_URL + "staff/" + orderIdFromIntent);
+                        mDatabase.child("Servicemen").child(servicemenList.get(positionSelected - 1).getId())
+                                .child("assignedOrders").child(orderIdFromIntent)
+                                .setValue(orderIdFromIntent);
+                        NotificationAsync notificationAsync = new NotificationAsync(ViewOrder.this);
+                        String notification_title = "New service assigned";
+                        String notification_message = "Click to view";
+                        notificationAsync.execute("ali", servicemenList.get(positionSelected - 1).getFcmKey(), notification_title, notification_message, "Order", "" + orderId);
+                        NotificationAsync notificationAsync1 = new NotificationAsync(ViewOrder.this);
+                        notificationAsync1.execute("ali", model.getUser().getFcmKey(), "Your service order has been assigned to " + servicemenList.get(positionSelected - 1).getName()
+                                , notification_message, "Order", "" + orderId);
+
+
+                    }
+
+                });
+    }
+
     private void getDataFromServer(String orderIdFromIntent) {
         mDatabase.child("Orders").child(orderIdFromIntent).addValueEventListener(new ValueEventListener() {
             @Override
@@ -242,6 +257,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         username.setText("" + model.getUser().getFullName());
                         buildingType.setText("" + model.getBuildingType());
                         phone.setText("" + model.getUser().getMobile());
+                        instructions.setText("Instructions: " + model.getInstructions());
                         address.setText(model.getOrderAddress());
 //                        city.setText(model.getUser().getAddress());
                         day.setText("Day: " + model.getDate());
@@ -291,6 +307,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         if (model.isJobFinish() || model.isJobDone()) {
                             modifyLayout.setVisibility(View.GONE);
                             invoice.setVisibility(View.VISIBLE);
+                            reAssign.setVisibility(View.GONE);
+                            assignedLayout.setVisibility(View.GONE);
                         }
 
 //                        Toast.makeText(ViewOrder.this, ""+list, Toast.LENGTH_SHORT).show();
@@ -446,7 +464,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         CommonUtils.showToast("Order marked as " + message);
 //                        invoice.setVisibility(View.GONE);
                         NotificationAsync notificationAsync = new NotificationAsync(ViewOrder.this);
-                        String notification_title = "You order is " + message;
+                        String notification_title = "You service is " + message;
                         String notification_message = "Click to view";
                         notificationAsync.execute("ali", userFcmKey, notification_title, notification_message, "Order", "" + orderIdFromIntent);
 //                        Intent i = new Intent(ViewOrder.this, Orders.class);

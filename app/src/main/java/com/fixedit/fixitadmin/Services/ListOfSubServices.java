@@ -29,28 +29,31 @@ public class ListOfSubServices extends AppCompatActivity {
     SubServiceListAdapter adapter;
     private ArrayList<SubServiceModel> itemList = new ArrayList<>();
     DatabaseReference mDatabase;
-    String parentService;
+    String parentServiceId;
+    private String parentServiceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_services);
+        setContentView(R.layout.activity_list_sub_services);
         addService = findViewById(R.id.addService);
         recyclerview = findViewById(R.id.recyclerview);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
-        parentService = getIntent().getStringExtra("parentService");
-        this.setTitle(parentService);
+        parentServiceName = getIntent().getStringExtra("parentServiceName");
+        parentServiceId = getIntent().getStringExtra("parentServiceId");
+        this.setTitle(parentServiceName);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         addService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(ListOfSubServices.this,AddSubService.class);
-                i.putExtra("parentService",parentService);
+                Intent i = new Intent(ListOfSubServices.this, AddSubService.class);
+                i.putExtra("parentServiceId", parentServiceId);
                 startActivity(i);
             }
 
@@ -61,7 +64,7 @@ public class ListOfSubServices extends AppCompatActivity {
         adapter = new SubServiceListAdapter(this, itemList, new SubServiceListAdapter.SubServiceListAdapterCallbacks() {
             @Override
             public void onServiceStatusChanged(SubServiceModel model, final boolean value) {
-                mDatabase.child("SubServices").child(model.getName()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("SubServices").child(model.getId()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (value) {
@@ -94,7 +97,7 @@ public class ListOfSubServices extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         SubServiceModel model = snapshot.getValue(SubServiceModel.class);
                         if (model != null) {
-                            if (model.getParentService().contains(parentService)) {
+                            if (model.getParentService().contains(parentServiceId)) {
                                 itemList.add(model);
                             }
                         }
@@ -122,7 +125,7 @@ public class ListOfSubServices extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("SubServices").child(model.getName()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("SubServices").child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Services Deleted");
@@ -140,6 +143,8 @@ public class ListOfSubServices extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.service_menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -150,7 +155,11 @@ public class ListOfSubServices extends AppCompatActivity {
 
             finish();
         }
-
+        if (item.getItemId() == R.id.action_add) {
+            Intent i = new Intent(ListOfSubServices.this, AddSubService.class);
+            i.putExtra("parentServiceId", parentServiceId);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -1,9 +1,7 @@
 package com.fixedit.fixitadmin.Activities.Orders;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,22 +9,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.fixedit.fixitadmin.Models.OrderModel;
 import com.fixedit.fixitadmin.Models.ServiceCountModel;
-import com.fixedit.fixitadmin.Models.ServiceModel;
 import com.fixedit.fixitadmin.R;
-import com.fixedit.fixitadmin.Services.SubServiceListAdapter;
+import com.fixedit.fixitadmin.Services.ServiceModel;
 import com.fixedit.fixitadmin.Services.SubServiceModel;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.NotificationAsync;
 import com.fixedit.fixitadmin.Utils.NotificationObserver;
-import com.fixedit.fixitadmin.Utils.SharedPrefs;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -166,9 +160,11 @@ public class ModifyOrder extends AppCompatActivity implements NotificationObserv
                         String notification_title = "Order Change Request";
                         String notification_message = "Click to view";
                         notificationAsync.execute("ali", model.getUser().getFcmKey(), notification_title, notification_message, "Modify", "" + orderId);
+                        finish();
 
                     }
                 });
+
 
 
             }

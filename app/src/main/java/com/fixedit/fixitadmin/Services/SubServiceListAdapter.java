@@ -51,50 +51,17 @@ public class SubServiceListAdapter extends RecyclerView.Adapter<SubServiceListAd
             holder.activate.setChecked(false);
         }
 
-        holder.options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                callbacks.onServiceDeleted(model);
-                PopupMenu popup = new PopupMenu(context, holder.options);
-                //inflating menu from xml resource
-                popup.inflate(R.menu.options_menu);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_edit:
-                                //handle menu1 click
-                                Intent i = new Intent(context, AddSubService.class);
-                                i.putExtra("id", model.getId());
-                                i.putExtra("parentService", model.getParentService());
-
-                                context.startActivity(i);
-                                return true;
-                            case R.id.action_delete:
-                                //handle menu2 click
-                                callbacks.onServiceDeleted(model);
-                                return true;
-
-                            default:
-                                return false;
-                        }
-                    }
-                });
-                //displaying the popup
-                popup.show();
-            }
-        });
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i=new Intent(context,AddSubService.class);
-//                i.putExtra("id",model.getName());
-//                i.putExtra("parentService",model.getParentService());
-//                context.startActivity(i);
+                Intent i = new Intent(context, AddSubService.class);
+                i.putExtra("id", model.getId());
+                i.putExtra("parentService", model.getParentService());
+
+                context.startActivity(i);
             }
         });
+
 
         holder.activate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -113,14 +80,12 @@ public class SubServiceListAdapter extends RecyclerView.Adapter<SubServiceListAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView options;
         TextView name;
         Switch activate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            options = itemView.findViewById(R.id.options);
             name = itemView.findViewById(R.id.name);
             activate = itemView.findViewById(R.id.activate);
 

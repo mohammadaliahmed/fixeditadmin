@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,11 @@ public class ViewInvoice extends AppCompatActivity {
 
     InvoiceListAdapter adapter;
     RelativeLayout wholeLayout;
+    TextView serviceName, buildingType;
+    TextView couponCode, discount, perHourCost;
+    LinearLayout couponArea;
+    TextView materialBill, materialPercent, tax;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +49,19 @@ public class ViewInvoice extends AppCompatActivity {
         invoiceId = getIntent().getStringExtra("invoiceId");
         this.setTitle("Bill Number: " + invoiceId);
 
+        materialPercent = findViewById(R.id.materialPercent);
+        tax = findViewById(R.id.tax);
+        couponCode = findViewById(R.id.couponCode);
+        materialBill = findViewById(R.id.materialBill);
+        discount = findViewById(R.id.discount);
+        couponArea = findViewById(R.id.couponArea);
         billNumber = findViewById(R.id.billNumber);
+        serviceName = findViewById(R.id.serviceName);
         orderNumber = findViewById(R.id.orderNumber);
         date = findViewById(R.id.date);
         dayChosen = findViewById(R.id.dayChosen);
         timeChosen = findViewById(R.id.timeChosen);
+        buildingType = findViewById(R.id.buildingType);
         customerName = findViewById(R.id.customerName);
         mobileNumber = findViewById(R.id.mobileNumber);
         address = findViewById(R.id.address);
@@ -55,6 +69,7 @@ public class ViewInvoice extends AppCompatActivity {
         totalTime = findViewById(R.id.totalTime);
         total = findViewById(R.id.total);
         wholeLayout = findViewById(R.id.wholeLayout);
+        perHourCost = findViewById(R.id.perHourCost);
         recycler = findViewById(R.id.recycler);
 
 
@@ -68,7 +83,7 @@ public class ViewInvoice extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     model = dataSnapshot.getValue(InvoiceModel.class);
                     if (model != null) {
-//                        billNumber.setText("Bill Number: " + model.getInvoiceId());
+                        billNumber.setText("Bill Number: " + model.getInvoiceId());
                         orderNumber.setText("Order Number: " + model.getOrder().getOrderId());
                         date.setText("Date: " + CommonUtils.getFormattedDate(model.getOrder().getTime()));
                         dayChosen.setText("Day: " + model.getOrder().getDate());
@@ -76,9 +91,24 @@ public class ViewInvoice extends AppCompatActivity {
                         customerName.setText("Customer Name: " + model.getOrder().getUser().getFullName());
                         mobileNumber.setText("Cell Number: " + model.getOrder().getUser().getMobile());
                         address.setText("Customer Address: " + model.getOrder().getOrderAddress());
+                        tax.setText(model.getOrder().getTax() + "% tax");
+                        materialPercent.setText("10% mat. bill: Rs " + (int) (model.getOrder().getMaterialBill() / 10));
                         comments.setText("Comments: " + model.getOrder().getInstructions());
                         total.setText("Total Bill: Rs " + model.getOrder().getTotalPrice());
-                        totalTime.setText("Total Time: " + model.getOrder().getTotalHours()+" hours");
+                        materialBill.setText("Mat. bill: Rs " + model.getOrder().getMaterialBill());
+                        totalTime.setText("Total Time: " + model.getOrder().getTotalHours() + " hours");
+                        serviceName.setText("Service Type: " + model.getOrder().getServiceName());
+                        buildingType.setText("Building Type: " + model.getOrder().getBuildingType());
+                        perHourCost.setText("Cost: " + model.getOrder().getTotalHours() + "*" + model.getOrder().getServiceCharges());
+                        if (model.getOrder().isCouponApplied()) {
+                            couponArea.setVisibility(View.VISIBLE);
+                            couponCode.setText("Coupon code: " + model.getOrder().getCouponCode());
+                            discount.setText("Discount: " + model.getOrder().getDiscount() + "%");
+                        } else {
+                            couponArea.setVisibility(View.GONE);
+                        }
+
+
                         recycler.setLayoutManager(new LinearLayoutManager(ViewInvoice.this, LinearLayoutManager.VERTICAL, false));
                         adapter = new InvoiceListAdapter(ViewInvoice.this, model.getOrder().getCountModelArrayList());
                         recycler.setAdapter(adapter);

@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Switch;
@@ -43,6 +45,7 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
     public void onBindViewHolder(@NonNull final ViewHolder holder, int i) {
         final ServiceModel model = itemlist.get(i);
         holder.name.setText(model.getName());
+        holder.position.setText(model.getPosition()+"");
 
         Glide.with(context).load(model.getImageUrl()).into(holder.image);
 
@@ -89,7 +92,8 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, ListOfSubServices.class);
-                i.putExtra("parentService", model.getId());
+                i.putExtra("parentServiceId", model.getId());
+                i.putExtra("parentServiceName", model.getName());
                 context.startActivity(i);
             }
         });
@@ -99,6 +103,17 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
                     callbacks.onServiceStatusChanged(model, isChecked);
+                }
+            }
+        });
+
+        holder.update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.position.getText().length() == 0) {
+                    holder.position.setError("Enter position");
+                } else {
+                    callbacks.onPositionChanged(model, Integer.parseInt(holder.position.getText().toString()));
                 }
             }
         });
@@ -114,6 +129,8 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
         ImageView image, options;
         TextView name;
         Switch activate;
+        EditText position;
+        Button update;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -122,6 +139,8 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
             options = itemView.findViewById(R.id.options);
             name = itemView.findViewById(R.id.name);
             activate = itemView.findViewById(R.id.activate);
+            update = itemView.findViewById(R.id.update);
+            position = itemView.findViewById(R.id.position);
 
         }
     }
@@ -130,5 +149,7 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
         public void onServiceStatusChanged(ServiceModel model, boolean value);
 
         public void onServiceDeleted(ServiceModel model);
+
+        public void onPositionChanged(ServiceModel model, int position);
     }
 }

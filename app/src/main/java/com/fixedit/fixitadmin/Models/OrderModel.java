@@ -39,29 +39,57 @@ public class OrderModel {
     long serviceCharges;
     boolean cancelled;
     String cancelReason;
+    boolean commercialBuilding;
+    int tax;
 
+    double endJourneyLat,endJourneyLng,startJourneyLat,startJourneyLng;
 
-    public OrderModel(long orderId, long time, User user, ArrayList<ServiceCountModel> countModelArrayList,
-                      long totalPrice, long totalHours, String instructions, String date, String chosenTime,
-                      String orderStatus, String orderAddress, String googleAddress,
-                      double lat, double lon,
-                      String buildingType, String serviceName) {
-        this.orderId = orderId;
-        this.time = time;
-        this.user = user;
-        this.countModelArrayList = countModelArrayList;
-        this.totalPrice = totalPrice;
-        this.instructions = instructions;
-        this.date = date;
-        this.chosenTime = chosenTime;
-        this.orderStatus = orderStatus;
-        this.orderAddress = orderAddress;
-        this.googleAddress = googleAddress;
-        this.lat = lat;
-        this.lon = lon;
-        this.buildingType = buildingType;
-        this.totalHours = totalHours;
-        this.serviceName = serviceName;
+    public double getEndJourneyLat() {
+        return endJourneyLat;
+    }
+
+    public void setEndJourneyLat(double endJourneyLat) {
+        this.endJourneyLat = endJourneyLat;
+    }
+
+    public double getEndJourneyLng() {
+        return endJourneyLng;
+    }
+
+    public void setEndJourneyLng(double endJourneyLng) {
+        this.endJourneyLng = endJourneyLng;
+    }
+
+    public double getStartJourneyLat() {
+        return startJourneyLat;
+    }
+
+    public void setStartJourneyLat(double startJourneyLat) {
+        this.startJourneyLat = startJourneyLat;
+    }
+
+    public double getStartJourneyLng() {
+        return startJourneyLng;
+    }
+
+    public void setStartJourneyLng(double startJourneyLng) {
+        this.startJourneyLng = startJourneyLng;
+    }
+
+    public int getTax() {
+        return tax;
+    }
+
+    public void setTax(int tax) {
+        this.tax = tax;
+    }
+
+    public boolean isCommercialBuilding() {
+        return commercialBuilding;
+    }
+
+    public void setCommercialBuilding(boolean commercialBuilding) {
+        this.commercialBuilding = commercialBuilding;
     }
 
     public boolean isCancelled() {

@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -46,7 +48,7 @@ import java.util.List;
 public class AddService extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 23;
     Button update;
-    EditText servicePrice, serviceDescription, serviceName, servicePeakPrice;
+    EditText servicePrice, serviceDescription, serviceName, servicePeakPrice, commercialServicePrice, commercialServicePeakPrice;
     DatabaseReference mDatabase;
     List<Uri> mSelected = new ArrayList<>();
     ArrayList<String> imageUrl = new ArrayList<>();
@@ -55,6 +57,9 @@ public class AddService extends AppCompatActivity {
     ImageView serviceImage;
     String id;
     RelativeLayout wholeLayout;
+    CheckBox residentialService, commercialService;
+
+    boolean offeringCommercialService, offeringResidentialService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,8 @@ public class AddService extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
+
         }
         this.setTitle("Add Service");
         getPermissions();
@@ -70,6 +77,8 @@ public class AddService extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        commercialService = findViewById(R.id.commercialService);
+        residentialService = findViewById(R.id.residentialService);
         update = findViewById(R.id.update);
         servicePrice = findViewById(R.id.servicePrice);
         serviceDescription = findViewById(R.id.serviceDescription);
@@ -77,6 +86,8 @@ public class AddService extends AppCompatActivity {
         serviceImage = findViewById(R.id.serviceImage);
         wholeLayout = findViewById(R.id.wholeLayout);
         servicePeakPrice = findViewById(R.id.servicePeakPrice);
+        commercialServicePeakPrice = findViewById(R.id.commercialServicePeakPrice);
+        commercialServicePrice = findViewById(R.id.commercialServicePrice);
 
 
         serviceImage.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +106,10 @@ public class AddService extends AppCompatActivity {
                     servicePrice.setError("Enter service price");
                 } else if (servicePeakPrice.getText().toString().trim().isEmpty()) {
                     servicePeakPrice.setError("Enter peak price");
+                } else if (commercialServicePrice.getText().toString().trim().isEmpty()) {
+                    commercialServicePrice.setError("Enter service price");
+                } else if (commercialServicePeakPrice.getText().toString().trim().isEmpty()) {
+                    commercialServicePeakPrice.setError("Enter peak price");
                 } else if (serviceDescription.getText().toString().trim().isEmpty()) {
                     serviceDescription.setError("Enter service description");
                 } else {
@@ -106,6 +121,33 @@ public class AddService extends AppCompatActivity {
                 }
             }
         });
+
+        residentialService.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    if (isChecked) {
+                        offeringResidentialService = true;
+                    } else {
+                        offeringResidentialService = false;
+                    }
+                }
+            }
+        });
+        commercialService.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    if (isChecked) {
+                        offeringCommercialService = true;
+                    } else {
+                        offeringCommercialService = false;
+                    }
+                }
+            }
+        });
+
+
         if (id != null) {
             getDataFromDB();
         }
@@ -118,12 +160,23 @@ public class AddService extends AppCompatActivity {
         map.put("description", serviceDescription.getText().toString());
         map.put("serviceBasePrice", Integer.parseInt(servicePrice.getText().toString()));
         map.put("peakPrice", Integer.parseInt(servicePeakPrice.getText().toString()));
+        map.put("commercialServicePrice", Integer.parseInt(commercialServicePrice.getText().toString()));
+        map.put("commercialServicePeakPrice", Integer.parseInt(commercialServicePeakPrice.getText().toString()));
+        map.put("offeringCommercialService", offeringCommercialService);
+        map.put("offeringResidentialService", offeringResidentialService);
 
         mDatabase.child("Services").child(id).updateChildren(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Updated");
+                        if (imageUrl.size() > 0) {
+                            putPictures(imageUrl.get(0));
+                        } else {
+                            CommonUtils.showToast("Updated");
+
+                            wholeLayout.setVisibility(View.GONE);
+                        }
                     }
                 });
 
@@ -139,8 +192,23 @@ public class AddService extends AppCompatActivity {
                         serviceName.setText(model.getName());
                         servicePrice.setText("" + model.getServiceBasePrice());
                         servicePeakPrice.setText("" + model.getPeakPrice());
+                        commercialServicePrice.setText("" + model.getCommercialServicePrice());
+                        commercialServicePeakPrice.setText("" + model.getCommercialServicePeakPrice());
                         serviceDescription.setText(model.getDescription());
-                        Glide.with(AddService.this).load(model.getImageUrl()).into(serviceImage);
+                        try {
+                            Glide.with(AddService.this).load(model.getImageUrl()).into(serviceImage);
+                        } catch (Exception e) {
+
+
+                        }
+                        if (model.offeringCommercialService) {
+                            commercialService.setChecked(true);
+                            offeringCommercialService = true;
+                        }
+                        if (model.offeringResidentialService) {
+                            residentialService.setChecked(true);
+                            offeringResidentialService = true;
+                        }
                     }
                 }
             }
@@ -154,17 +222,23 @@ public class AddService extends AppCompatActivity {
 
     private void sendDataToDB() {
         wholeLayout.setVisibility(View.VISIBLE);
+        id = mDatabase.push().getKey();
         ServiceModel serviceModel = new ServiceModel(
-                serviceName.getText().toString(),
+                id,
+                1,
                 serviceName.getText().toString(),
                 serviceDescription.getText().toString(),
                 true,
                 false,
                 Integer.parseInt(servicePrice.getText().toString()),
                 Integer.parseInt(servicePeakPrice.getText().toString()),
-                ""
+                Integer.parseInt(commercialServicePrice.getText().toString()),
+                Integer.parseInt(commercialServicePeakPrice.getText().toString()),
+                "",
+                offeringResidentialService,
+                offeringCommercialService
         );
-        mDatabase.child("Services").child(serviceName.getText().toString()).setValue(serviceModel)
+        mDatabase.child("Services").child(id).setValue(serviceModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -228,7 +302,7 @@ public class AddService extends AppCompatActivity {
 
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         mDatabase.child("Services")
-                                .child(serviceName.getText().toString())
+                                .child(id)
                                 .child("imageUrl").setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

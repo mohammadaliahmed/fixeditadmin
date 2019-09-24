@@ -44,6 +44,7 @@ public class CommonUtils {
         });
     }
 
+
     public static void sendMessage(String number, String message) {
 //        String request = "https://bulksms.com.pk";
 //
@@ -74,6 +75,39 @@ public class CommonUtils {
 
     }
 
+    public static String getDayName(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+        int day = smsTime.get(Calendar.DAY_OF_WEEK);
+        String dayName = "";
+        switch (day) {
+            case 1:
+                dayName = "Sunday";
+                break;
+            case 2:
+                dayName = "Monday";
+                break;
+            case 3:
+                dayName = "Tuesday";
+                break;
+            case 4:
+                dayName = "Wednesday";
+                break;
+            case 5:
+                dayName = "Thursday";
+                break;
+            case 6:
+                dayName = "Friday";
+                break;
+            case 7:
+                dayName = "Saturday";
+        }
+
+
+        return dayName;
+
+    }
+
     public static String getFormattedPrice(Object price) {
         DecimalFormat formatter = new DecimalFormat("##,##,###");
         String formattedPrice = formatter.format(price);
@@ -100,6 +134,27 @@ public class CommonUtils {
         }
     }
 
+    public static double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+    public static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    public static double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+
+
     public static String getFormattedDateOnly(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeInMillis(smsTimeInMilis);
@@ -115,6 +170,15 @@ public class CommonUtils {
         return DateFormat.format("dd", smsTime).toString();
 
     }
+
+    public static String getMonthName(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("MMM", smsTime).toString();
+
+    }
+
 
     public static String getMonth(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();

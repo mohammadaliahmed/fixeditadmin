@@ -1,5 +1,6 @@
 package com.fixedit.fixitadmin.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.fixedit.fixitadmin.Adapters.BillsAdapter;
+import com.fixedit.fixitadmin.ChangePolicy;
 import com.fixedit.fixitadmin.Models.AdminModel;
 import com.fixedit.fixitadmin.Models.InvoiceModel;
 import com.fixedit.fixitadmin.R;
@@ -29,8 +31,10 @@ import java.util.Comparator;
 public class AppSettings extends AppCompatActivity {
     DatabaseReference mDatabase;
 
-    EditText adminNumber;
-    Button updateNumber;
+    EditText adminNumber, cities, tax;
+    Button updateNumber, updateCities, updateTax;
+
+    Button change;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public class AppSettings extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         updateNumber = findViewById(R.id.updateNumber);
         adminNumber = findViewById(R.id.adminNumber);
+        tax = findViewById(R.id.tax);
+        updateTax = findViewById(R.id.updateTax);
+        change = findViewById(R.id.change);
 
         updateNumber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +67,44 @@ public class AppSettings extends AppCompatActivity {
                 }
             }
         });
+        updateTax.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tax.getText().length() == 0) {
+                    tax.setError("Enter tax");
+                } else {
+                    mDatabase.child("Admin").child("tax").setValue(Integer.parseInt(tax.getText().toString())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            CommonUtils.showToast("Tax Added");
+                        }
+                    });
+                }
+            }
+        });
+        cities = findViewById(R.id.cities);
+        updateCities = findViewById(R.id.updateCities);
+
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AppSettings.this, ChangePolicy.class));
+            }
+        });
+
+        updateCities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mDatabase.child("Admin").child("providingServiceInCities").setValue(cities.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        CommonUtils.showToast("Updated");
+                    }
+                });
+
+            }
+        });
 
         getDataFromDB();
 
@@ -74,6 +119,8 @@ public class AppSettings extends AppCompatActivity {
                         AdminModel model = dataSnapshot.getValue(AdminModel.class);
                         if (model != null) {
                             adminNumber.setText(model.getAdminNumber());
+                            cities.setText(model.getProvidingServiceInCities());
+                            tax.setText(""+model.getTax());
                         }
                     }
                 }
