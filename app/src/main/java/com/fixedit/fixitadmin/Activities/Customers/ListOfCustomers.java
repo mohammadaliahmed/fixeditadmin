@@ -171,7 +171,7 @@ public class ListOfCustomers extends AppCompatActivity {
             writer = new CSVWriter(new FileWriter(csv));
 
             List<String[]> data = new ArrayList<String[]>();
-            data.add(new String[]{"Serial #", "Username", "Name", "Phone", "Address", "Google Address", "Total services booked",
+            data.add(new String[]{"Serial #", "Username", "Name", "Phone","Joined", "Address", "Google Address", "Total services booked",
                     "Total Payment"});
             int serial = 0;
             for (User model : itemList) {
@@ -181,6 +181,7 @@ public class ListOfCustomers extends AppCompatActivity {
                         "" + model.getUsername(),
                         "" + model.getFullName(),
                         model.getMobile(),
+                        CommonUtils.getFormattedDateOnly(model.getTime()),
                         model.getAddress(),
                         "" + model.getGoogleAddress(),
                         "" + model.getOrders().size(),

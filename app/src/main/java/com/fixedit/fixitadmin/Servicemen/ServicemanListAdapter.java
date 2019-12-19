@@ -37,7 +37,7 @@ public class ServicemanListAdapter extends RecyclerView.Adapter<ServicemanListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.sub_service_item_layout, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.serviceman_item_layout, viewGroup, false);
         ServicemanListAdapter.ViewHolder viewHolder = new ServicemanListAdapter.ViewHolder(view);
 
         return viewHolder;
@@ -62,39 +62,6 @@ public class ServicemanListAdapter extends RecyclerView.Adapter<ServicemanListAd
             holder.activate.setChecked(false);
         }
 
-        holder.options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                callbacks.onServiceDeleted(model);
-                PopupMenu popup = new PopupMenu(context, holder.options);
-                //inflating menu from xml resource
-                popup.inflate(R.menu.options_menu);
-                //adding click listener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_edit:
-                                //handle menu1 click
-                                Intent i = new Intent(context, AddServicemen.class);
-                                i.putExtra("id", model.getId());
-
-                                context.startActivity(i);
-                                return true;
-                            case R.id.action_delete:
-                                //handle menu2 click
-                                callbacks.onServicemanDeleted(model);
-                                return true;
-
-                            default:
-                                return false;
-                        }
-                    }
-                });
-                //displaying the popup
-                popup.show();
-            }
-        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +69,7 @@ public class ServicemanListAdapter extends RecyclerView.Adapter<ServicemanListAd
                 Intent i = new Intent(context, AddServicemen.class);
                 i.putExtra("id", model.getId());
                 context.startActivity(i);
+
             }
         });
 
