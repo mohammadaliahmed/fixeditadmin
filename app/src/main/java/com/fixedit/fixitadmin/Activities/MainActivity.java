@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.fixedit.fixitadmin.Activities.Coupons.ListOfCoupons;
 import com.fixedit.fixitadmin.Activities.Customers.ListOfCustomers;
 import com.fixedit.fixitadmin.Activities.Orders.Orders;
+import com.fixedit.fixitadmin.Activities.Reports.ReportsActivity;
 import com.fixedit.fixitadmin.Activities.TimeSlotManagement.TimeSlotList;
 import com.fixedit.fixitadmin.Notifications.SendNotification;
 import com.fixedit.fixitadmin.R;
@@ -35,7 +36,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    LinearLayout services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots;
+    LinearLayout services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, reports;
     DatabaseReference mDatabase;
     private ArrayList<String> itemList = new ArrayList();
 
@@ -54,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
         serviceMen = findViewById(R.id.serviceMen);
         coupons = findViewById(R.id.coupons);
         timeslots = findViewById(R.id.timeslots);
+        reports = findViewById(R.id.reports);
+
+        reports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ReportsActivity.class));
+            }
+        });
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();

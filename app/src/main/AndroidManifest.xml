@@ -64,6 +64,7 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".Notifications.SendNotification" />
         <activity android:name=".Notifications.NotificationHistory" />
+        <activity android:name=".Activities.Reports.ReportsActivity" />
 
         <service android:name=".Utils.MyFirebaseInstanceIDService">
             <intent-filter>
