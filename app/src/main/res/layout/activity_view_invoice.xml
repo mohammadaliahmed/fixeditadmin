@@ -357,7 +357,7 @@
                         android:background="@drawable/cell_shape"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Mat.bill Rs 500"
+                        android:text="Mat.bill AED 500"
                         android:textColor="#000"
                         android:textSize="10sp" />
 
@@ -370,7 +370,7 @@
                         android:gravity="center"
                         android:padding="8dp"
 
-                        android:text="10% Mat. Bill : Rs 100"
+                        android:text="10% Mat. Bill : AED 100"
                         android:textColor="#000"
                         android:textSize="10sp" />
 

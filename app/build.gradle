@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.fixedit.fixitadmin"
+        applicationId "com.appsinventiv.mrapplianceadmin"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 1

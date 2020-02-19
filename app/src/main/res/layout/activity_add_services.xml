@@ -78,6 +78,7 @@
                         android:id="@+id/servicePrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="150"
                         android:hint="Service Price"
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
@@ -86,12 +87,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/servicePeakPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="150"
                         android:hint="Peak Price"
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
@@ -140,6 +143,7 @@
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/commercialServicePrice"
                         android:layout_width="match_parent"
+                        android:text="150"
                         android:layout_height="wrap_content"
                         android:hint="Service Price"
                         android:inputType="number" />
@@ -149,15 +153,69 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="gone">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/commercialServicePeakPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="150"
                         android:hint="Peak Price"
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="Villa"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/villaService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:layoutDirection="rtl"
+                    android:text="Offering Villa Service"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/villaServicePrice"
+                        android:layout_width="match_parent"
+                        android:text="150"
+                        android:layout_height="wrap_content"
+                        android:hint="Service Price"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+
             </LinearLayout>
 
 

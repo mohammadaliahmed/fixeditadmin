@@ -20,9 +20,9 @@
                 android:id="@+id/servicemanImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:padding="10dp"
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
+                android:padding="10dp"
                 android:src="@drawable/upload_photo" />
 
             <android.support.design.widget.TextInputLayout
@@ -105,10 +105,10 @@
                     android:layout_weight="2">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/cnic"
+                        android:id="@+id/eid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cnic"
+                        android:hint="EID"
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
