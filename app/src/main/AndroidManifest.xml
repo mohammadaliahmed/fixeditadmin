@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fixedit.fixitadmin">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <application
+        android:name=".ApplicationClass"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Services.AddService"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Services.ListOfServices"/>
+        <activity android:name=".Services.AddSubService"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Services.ListOfSubServices"/>
+        <activity android:name=".Activities.TimeSlotManagement.TimeSlotList"/>
+        <activity android:name=".Activities.Coupons.ListOfCoupons"/>
+        <activity android:name=".Activities.Customers.ListOfCustomers"/>
+        <activity android:name=".Activities.Customers.ViewCustomer"/>
+        <activity android:name=".Activities.Coupons.AddCoupon"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Activities.Orders.Orders"/>
+        <activity android:name=".Activities.Orders.ViewOrder">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://recipe-app.com/recipe" -->
+                <data
+                    android:host="fixedit.services"
+                    android:pathPrefix="/admin"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activities.ViewInvoice"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Activities.ListOfBills"/>
+        <activity android:name=".Activities.ViewServicePictures"/>
+        <activity android:name=".Activities.Orders.ModifyOrder"/>
+        <activity android:name=".Activities.ExportOrders"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Activities.AppSettings"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Activities.PicturesSlider"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Servicemen.ListOfServicemen"/>
+        <activity android:name=".Servicemen.AddServicemen"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".ChangePolicy"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".Notifications.SendNotification" />
+        <activity android:name=".Notifications.NotificationHistory" />
+
+        <service android:name=".Utils.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Utils.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name=".provider.GenericFileProvider"
+            android:authorities="com.fixedit.fixitadmin.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+    </application>
+
+</manifest>
