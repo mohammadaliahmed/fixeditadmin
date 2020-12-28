@@ -2,23 +2,15 @@ package com.fixedit.fixitadmin.Activities.Customers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.Switch;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.fixedit.fixitadmin.Models.User;
 import com.fixedit.fixitadmin.R;
-import com.fixedit.fixitadmin.Servicemen.AddServicemen;
-import com.fixedit.fixitadmin.Servicemen.ServicemanModel;
 
 import java.util.ArrayList;
 

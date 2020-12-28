@@ -2,17 +2,13 @@ package com.fixedit.fixitadmin.Notifications;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.fixedit.fixitadmin.ChangePolicy;
-import com.fixedit.fixitadmin.Models.AdminModel;
 import com.fixedit.fixitadmin.Models.User;
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
@@ -26,8 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class SendNotification extends AppCompatActivity implements NotificationObserver {
     EditText notificationMessage, notificationTitle;

@@ -2,19 +2,16 @@ package com.fixedit.fixitadmin.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.fixedit.fixitadmin.Adapters.BillsAdapter;
 import com.fixedit.fixitadmin.ChangePolicy;
 import com.fixedit.fixitadmin.Models.AdminModel;
-import com.fixedit.fixitadmin.Models.InvoiceModel;
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,10 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class AppSettings extends AppCompatActivity {
     DatabaseReference mDatabase;

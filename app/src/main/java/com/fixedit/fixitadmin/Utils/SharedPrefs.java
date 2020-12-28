@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.fixedit.fixitadmin.ApplicationClass;
 import com.fixedit.fixitadmin.Models.User;
+import com.fixedit.fixitadmin.Models.VendorModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -96,16 +97,16 @@ public class SharedPrefs {
     }
 
 
-    public static void setUser(User model) {
+    public static void setVendorModel(VendorModel model) {
 
         Gson gson = new Gson();
         String json = gson.toJson(model);
         preferenceSetter("customerModel", json);
     }
 
-    public static User getUser() {
+    public static VendorModel getVendorModel() {
         Gson gson = new Gson();
-        User customer = gson.fromJson(preferenceGetter("customerModel"), User.class);
+        VendorModel customer = gson.fromJson(preferenceGetter("customerModel"), VendorModel.class);
         return customer;
     }
 

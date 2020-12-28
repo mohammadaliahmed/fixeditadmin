@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fixedit.fixitadmin">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"
@@ -12,27 +13,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.MainActivity"
+        <activity
+            android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".Services.AddService"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Services.ListOfServices"/>
-        <activity android:name=".Services.AddSubService"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Services.ListOfSubServices"/>
-        <activity android:name=".Activities.TimeSlotManagement.TimeSlotList"/>
-        <activity android:name=".Activities.Coupons.ListOfCoupons"/>
-        <activity android:name=".Activities.Customers.ListOfCustomers"/>
-        <activity android:name=".Activities.Customers.ViewCustomer"/>
-        <activity android:name=".Activities.Coupons.AddCoupon"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Activities.Orders.Orders"/>
+        <activity
+            android:name=".Services.AddService"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Services.ListOfServices" />
+        <activity
+            android:name=".Services.AddSubService"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Services.ListOfSubServices" />
+        <activity android:name=".Activities.TimeSlotManagement.TimeSlotList" />
+        <activity android:name=".Activities.Coupons.ListOfCoupons" />
+        <activity android:name=".Activities.Customers.ListOfCustomers" />
+        <activity android:name=".Activities.Customers.ViewCustomer" />
+        <activity
+            android:name=".Activities.Coupons.AddCoupon"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Activities.Orders.Orders" />
         <activity android:name=".Activities.Orders.ViewOrder">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -46,24 +47,45 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ViewInvoice"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activities.ListOfBills"/>
-        <activity android:name=".Activities.ViewServicePictures"/>
-        <activity android:name=".Activities.Orders.ModifyOrder"/>
-        <activity android:name=".Activities.ExportOrders"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Activities.AppSettings"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Activities.PicturesSlider"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Servicemen.ListOfServicemen"/>
-        <activity android:name=".Servicemen.AddServicemen"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".ChangePolicy"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".Activities.ViewInvoice"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.ListOfBills" />
+        <activity android:name=".Activities.ViewServicePictures" />
+        <activity android:name=".Activities.Orders.ModifyOrder" />
+        <activity
+            android:name=".Activities.ExportOrders"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.AppSettings"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.PicturesSlider"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Servicemen.ListOfServicemen" />
+        <activity
+            android:name=".Servicemen.AddServicemen"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ChangePolicy"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Notifications.SendNotification" />
         <activity android:name=".Notifications.NotificationHistory" />
+        <activity
+            android:name=".Activities.Coupons.Splash"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.UserManagement.LoginMenu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.UserManagement.Signup"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".Utils.MyFirebaseInstanceIDService">
             <intent-filter>

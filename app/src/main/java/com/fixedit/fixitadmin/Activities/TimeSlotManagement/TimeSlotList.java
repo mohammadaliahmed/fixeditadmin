@@ -1,29 +1,20 @@
 package com.fixedit.fixitadmin.Activities.TimeSlotManagement;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.MimeTypeMap;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.fixedit.fixitadmin.Activities.Customers.CustomersListAdapter;
-import com.fixedit.fixitadmin.Activities.MainActivity;
 import com.fixedit.fixitadmin.Adapters.TimeslotsAdapter;
-import com.fixedit.fixitadmin.Models.OrderModel;
-import com.fixedit.fixitadmin.Models.User;
 import com.fixedit.fixitadmin.R;
-import com.fixedit.fixitadmin.Services.ListOfSubServices;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,19 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.opencsv.CSVWriter;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class TimeSlotList extends AppCompatActivity {
     DatabaseReference mDatabase;

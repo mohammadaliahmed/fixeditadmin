@@ -2,18 +2,16 @@ package com.fixedit.fixitadmin.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.fixedit.fixitadmin.Activities.Coupons.ListOfCoupons;
+import com.fixedit.fixitadmin.Activities.Coupons.Splash;
 import com.fixedit.fixitadmin.Activities.Customers.ListOfCustomers;
 import com.fixedit.fixitadmin.Activities.Orders.Orders;
 import com.fixedit.fixitadmin.Activities.TimeSlotManagement.TimeSlotList;
@@ -22,7 +20,6 @@ import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Servicemen.ListOfServicemen;
 import com.fixedit.fixitadmin.Services.ListOfServices;
 import com.fixedit.fixitadmin.Services.ServiceModel;
-import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,9 +32,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    LinearLayout services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots;
+    LinearLayout services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, logout;
     DatabaseReference mDatabase;
     private ArrayList<String> itemList = new ArrayList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +52,12 @@ public class MainActivity extends AppCompatActivity {
         serviceMen = findViewById(R.id.serviceMen);
         coupons = findViewById(R.id.coupons);
         timeslots = findViewById(R.id.timeslots);
+        logout = findViewById(R.id.logout);
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("Admin").child("fcmKey").setValue(FirebaseInstanceId.getInstance().getToken());
+        mDatabase.child("Vendors").child(SharedPrefs.getVendorModel().getUsername()).child("fcmKey").setValue(FirebaseInstanceId.getInstance().getToken());
 
         serviceMen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +71,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, Orders.class));
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPrefs.logout();
+                Intent i = new Intent(MainActivity.this, Splash.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
             }
         });
 

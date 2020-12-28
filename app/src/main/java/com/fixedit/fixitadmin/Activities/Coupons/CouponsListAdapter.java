@@ -2,8 +2,8 @@ package com.fixedit.fixitadmin.Activities.Coupons;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,11 +14,7 @@ import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.fixedit.fixitadmin.R;
-import com.fixedit.fixitadmin.Services.AddService;
-import com.fixedit.fixitadmin.Services.ListOfSubServices;
-import com.fixedit.fixitadmin.Services.ServiceModel;
 
 import java.util.ArrayList;
 
