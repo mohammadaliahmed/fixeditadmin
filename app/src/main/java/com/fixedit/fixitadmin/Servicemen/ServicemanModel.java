@@ -7,11 +7,12 @@ public class ServicemanModel {
     long cnic;
     String imageUrl;
     String fcmKey;
+    String city;
 
     public ServicemanModel() {
     }
 
-    public ServicemanModel(String id, String name, String username, String password, String mobile, String role, boolean active, boolean deleted, int age, long cnic, String imageUrl) {
+    public ServicemanModel(String id, String name, String username, String password, String mobile, String role, boolean active, boolean deleted, int age, long cnic, String imageUrl,String city) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -23,6 +24,15 @@ public class ServicemanModel {
         this.age = age;
         this.cnic = cnic;
         this.imageUrl = imageUrl;
+        this.city = city;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getFcmKey() {

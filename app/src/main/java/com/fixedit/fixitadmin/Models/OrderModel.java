@@ -42,6 +42,25 @@ public class OrderModel {
     boolean commercialBuilding;
     int tax;
 
+    String vendor;
+    ArrayList<String> beforeWorkPictures;
+
+    public ArrayList<String> getBeforeWorkPictures() {
+        return beforeWorkPictures;
+    }
+
+    public void setBeforeWorkPictures(ArrayList<String> beforeWorkPictures) {
+        this.beforeWorkPictures = beforeWorkPictures;
+    }
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
+
     double endJourneyLat,endJourneyLng,startJourneyLat,startJourneyLng;
 
     public double getEndJourneyLat() {

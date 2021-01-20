@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.fixedit.fixitadmin.Activities.Coupons.ListOfCoupons;
+import com.fixedit.fixitadmin.Activities.Coupons.Sales;
 import com.fixedit.fixitadmin.Activities.Coupons.Splash;
 import com.fixedit.fixitadmin.Activities.Customers.ListOfCustomers;
 import com.fixedit.fixitadmin.Activities.Orders.Orders;
@@ -32,7 +33,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    LinearLayout services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, logout;
+    LinearLayout services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, logout,sales;
     DatabaseReference mDatabase;
     private ArrayList<String> itemList = new ArrayList();
 
@@ -52,7 +53,14 @@ public class MainActivity extends AppCompatActivity {
         serviceMen = findViewById(R.id.serviceMen);
         coupons = findViewById(R.id.coupons);
         timeslots = findViewById(R.id.timeslots);
+        sales = findViewById(R.id.sales);
         logout = findViewById(R.id.logout);
+        sales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, Sales.class));
+            }
+        });
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -156,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getServicesFromDB() {
-        mDatabase.child("Services").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("ServicesList").child(SharedPrefs.getVendorModel().getCity()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {

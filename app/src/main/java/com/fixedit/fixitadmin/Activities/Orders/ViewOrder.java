@@ -3,12 +3,14 @@ package com.fixedit.fixitadmin.Activities.Orders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.fixedit.fixitadmin.Activities.ViewInvoice;
 import com.fixedit.fixitadmin.Activities.ViewServicePictures;
+import com.fixedit.fixitadmin.Adapters.PicturesAdapter;
 import com.fixedit.fixitadmin.Models.InvoiceModel;
 import com.fixedit.fixitadmin.Models.OrderModel;
 import com.fixedit.fixitadmin.Models.ServiceCountModel;
@@ -30,6 +33,7 @@ import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.Constants;
 import com.fixedit.fixitadmin.Utils.NotificationAsync;
 import com.fixedit.fixitadmin.Utils.NotificationObserver;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -72,6 +76,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
     private boolean reassignJob;
 
     TextView instructions;
+    RecyclerView recyclerPictures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +95,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
 
 
         reAssign = findViewById(R.id.reAssign);
+        recyclerPictures = findViewById(R.id.recyclerPictures);
         instructions = findViewById(R.id.instructions);
         orderId = findViewById(R.id.order_id);
         buildingType = findViewById(R.id.buildingType);
@@ -264,6 +270,17 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         adapter = new OrderedServicesAdapter(ViewOrder.this, list);
                         recyclerView.setAdapter(adapter);
 
+                        if (model.getBeforeWorkPictures() != null) {
+                            PicturesAdapter picturesAdapter = new PicturesAdapter(ViewOrder.this, model.getBeforeWorkPictures(), new PicturesAdapter.PicturesAdapterCallback() {
+                                @Override
+                                public void onDelete(int position) {
+
+                                }
+                            });
+                            recyclerPictures.setLayoutManager(new LinearLayoutManager(ViewOrder.this, RecyclerView.HORIZONTAL, false));
+                            recyclerPictures.setAdapter(picturesAdapter);
+                        }
+
 
                         if (model.getOrderStatus().equalsIgnoreCase("Pending")) {
                             orderCompleted.setVisibility(View.GONE);
@@ -339,7 +356,9 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ServicemanModel model = snapshot.getValue(ServicemanModel.class);
                         if (model != null) {
-                            servicemenList.add(model);
+                            if (model.getCity().equalsIgnoreCase(SharedPrefs.getVendorModel().getCity())) {
+                                servicemenList.add(model);
+                            }
                         }
                     }
                     setupSpinner();

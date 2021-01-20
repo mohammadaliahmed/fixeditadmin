@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.MimeTypeMap;
@@ -15,6 +17,7 @@ import com.fixedit.fixitadmin.Activities.MainActivity;
 import com.fixedit.fixitadmin.Models.OrderModel;
 import com.fixedit.fixitadmin.Models.User;
 import com.fixedit.fixitadmin.R;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,6 +52,7 @@ public class ListOfCustomers extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Customers");
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -70,13 +74,15 @@ public class ListOfCustomers extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User model = snapshot.getValue(User.class);
                         if (model != null) {
-                            HashMap<String, String> map = new HashMap<>();
-                            for (DataSnapshot snapshot1 : snapshot.child("Orders").getChildren()) {
-                                map.put(snapshot1.getKey(), "" + snapshot1.getValue(Long.class));
+                            if (model.getCity() != null && model.getCity().equalsIgnoreCase(SharedPrefs.getVendorModel().getCity())) {
+                                HashMap<String, String> map = new HashMap<>();
+                                for (DataSnapshot snapshot1 : snapshot.child("Orders").getChildren()) {
+                                    map.put(snapshot1.getKey(), "" + snapshot1.getValue(Long.class));
+                                }
+                                model.setOrders(map);
+                                itemList.add(model);
+                                userMap.put(snapshot.getKey(), model);
                             }
-                            model.setOrders(map);
-                            itemList.add(model);
-                            userMap.put(snapshot.getKey(), model);
                         }
                     }
                     Collections.sort(itemList, new Comparator<User>() {

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +41,7 @@ public class ListOfCoupons extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("List of Coupons");
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -56,7 +58,7 @@ public class ListOfCoupons extends AppCompatActivity {
         adapter = new CouponsListAdapter(this, itemList, new CouponsListAdapter.CouponsListAdapterCallbacks() {
             @Override
             public void onCouponStatusChanged(CouponModel model, final boolean value) {
-                mDatabase.child("Coupons").child(model.getCouponId()).child("active")
+                mDatabase.child("Coupons").child(SharedPrefs.getVendorModel().getCity()).child(model.getCouponId()).child("active")
                         .setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -81,7 +83,7 @@ public class ListOfCoupons extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("Coupons").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Coupons").child(SharedPrefs.getVendorModel().getCity()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -115,7 +117,7 @@ public class ListOfCoupons extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("Coupons").child(model.getCouponId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("Coupons").child(SharedPrefs.getVendorModel().getCity()).child(model.getCouponId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Coupon Deleted");

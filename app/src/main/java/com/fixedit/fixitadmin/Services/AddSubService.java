@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -92,7 +93,7 @@ public class AddSubService extends AppCompatActivity {
         map.put("measureUnit", measureUnit.getText().toString());
 
 
-        mDatabase.child("SubServices").child(id).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).child(id).updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 CommonUtils.showToast("Updated");
@@ -102,7 +103,7 @@ public class AddSubService extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("SubServices").child(id).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -139,7 +140,7 @@ public class AddSubService extends AppCompatActivity {
         );
 
 
-        mDatabase.child("SubServices").child(id).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).child(id).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 CommonUtils.showToast("Updated");

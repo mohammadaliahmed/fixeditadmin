@@ -6,6 +6,8 @@ package com.fixedit.fixitadmin.Utils;
 
 public class Constants {
 
-        public static String FIXEDIT_URL="http://fixedit.services/";
+//        public static String FIXEDIT_URL="http://fixedit.services/";
+        public static String FIXEDIT_URL="http://192.168.100.31/fixit/public/";
+        public static String FIXEDIT_IMAGE=FIXEDIT_URL+"uploads/";
 
 }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +65,7 @@ public class ListOfSubServices extends AppCompatActivity {
         adapter = new SubServiceListAdapter(this, itemList, new SubServiceListAdapter.SubServiceListAdapterCallbacks() {
             @Override
             public void onServiceStatusChanged(SubServiceModel model, final boolean value) {
-                mDatabase.child("SubServices").child(model.getId()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).child(model.getId()).child("active").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (value) {
@@ -89,7 +90,7 @@ public class ListOfSubServices extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("SubServices").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -125,7 +126,7 @@ public class ListOfSubServices extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mDatabase.child("SubServices").child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         CommonUtils.showToast("Services Deleted");

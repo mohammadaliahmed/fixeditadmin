@@ -11,6 +11,7 @@ public class User {
     double lat, lon;
     HashMap<String, String> orders;
 
+    String city;
     long totalOrder, totalPayment;
 
     public User(String firstname, String lastname, String username, String password,
@@ -32,6 +33,13 @@ public class User {
     public User() {
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public long getTotalOrder() {
         return totalOrder;

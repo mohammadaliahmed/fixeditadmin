@@ -25,6 +25,7 @@ import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.CompressImage;
 import com.fixedit.fixitadmin.Utils.GifSizeFilter;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -165,7 +166,7 @@ public class AddService extends AppCompatActivity {
         map.put("offeringCommercialService", offeringCommercialService);
         map.put("offeringResidentialService", offeringResidentialService);
 
-        mDatabase.child("Services").child(id).updateChildren(map)
+        mDatabase.child("ServicesList").child(SharedPrefs.getVendorModel().getCity()).child(id).updateChildren(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -183,7 +184,7 @@ public class AddService extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("Services").child(id).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("ServicesList").child(SharedPrefs.getVendorModel().getCity()).child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -238,7 +239,7 @@ public class AddService extends AppCompatActivity {
                 offeringResidentialService,
                 offeringCommercialService
         );
-        mDatabase.child("Services").child(id).setValue(serviceModel)
+        mDatabase.child("ServicesList").child(SharedPrefs.getVendorModel().getCity()).child(id).setValue(serviceModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -301,7 +302,7 @@ public class AddService extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        mDatabase.child("Services")
+                        mDatabase.child("ServicesList").child(SharedPrefs.getVendorModel().getCity())
                                 .child(id)
                                 .child("imageUrl").setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

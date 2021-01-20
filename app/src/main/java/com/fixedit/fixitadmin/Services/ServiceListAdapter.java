@@ -2,8 +2,10 @@ package com.fixedit.fixitadmin.Services;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.fixedit.fixitadmin.R;
+import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.Constants;
 
 import java.util.ArrayList;
 
@@ -45,9 +49,9 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
     public void onBindViewHolder(@NonNull final ViewHolder holder, int i) {
         final ServiceModel model = itemlist.get(i);
         holder.name.setText(model.getName());
-        holder.position.setText(model.getPosition()+"");
+        holder.position.setText(model.getPosition() + "");
 
-        Glide.with(context).load(model.getImageUrl()).into(holder.image);
+        Glide.with(context).load(Constants.FIXEDIT_IMAGE + model.getImageUrl()).into(holder.image);
 
         if (model.isActive()) {
             holder.activate.setChecked(true);

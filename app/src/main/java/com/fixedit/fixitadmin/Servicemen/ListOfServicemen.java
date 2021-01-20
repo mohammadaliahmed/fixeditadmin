@@ -4,10 +4,12 @@ package com.fixedit.fixitadmin.Servicemen;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import com.fixedit.fixitadmin.R;
 
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +45,8 @@ public class ListOfServicemen extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
+
         }
         this.setTitle("Servicemen");
 
@@ -94,7 +99,9 @@ public class ListOfServicemen extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ServicemanModel model = snapshot.getValue(ServicemanModel.class);
                         if (model != null) {
-                            itemList.add(model);
+                            if (model.getCity().equalsIgnoreCase(SharedPrefs.getVendorModel().getCity())) {
+                                itemList.add(model);
+                            }
 
                         }
                     }

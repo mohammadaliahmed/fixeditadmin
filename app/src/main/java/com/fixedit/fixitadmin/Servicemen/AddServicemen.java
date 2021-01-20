@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.CompressImage;
 import com.fixedit.fixitadmin.Utils.GifSizeFilter;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -69,6 +72,8 @@ public class AddServicemen extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
+
         }
         this.setTitle("Add Serviceman");
         getPermissions();
@@ -179,7 +184,7 @@ public class AddServicemen extends AppCompatActivity {
                         mobile.setText(model.getMobile());
                         age.setText("" + model.getAge());
                         cnic.setText("" + model.getCnic());
-                        Glide.with(AddServicemen.this).load(model.getImageUrl()).into(servicemanImage);
+                        Glide.with(AddServicemen.this).load(model.getImageUrl()).placeholder(R.drawable.ic_profile_plc).into(servicemanImage);
                     }
                 }
             }
@@ -203,7 +208,8 @@ public class AddServicemen extends AppCompatActivity {
                 true, false,
                 Integer.parseInt(age.getText().toString()),
                 Long.parseLong(cnic.getText().toString()),
-                ""
+                "",
+                SharedPrefs.getVendorModel().getCity()
 
         );
         mDatabase.child("Servicemen").child(id).setValue(model)

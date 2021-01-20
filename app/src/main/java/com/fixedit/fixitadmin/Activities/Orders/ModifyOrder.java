@@ -21,6 +21,7 @@ import com.fixedit.fixitadmin.Services.SubServiceModel;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.NotificationAsync;
 import com.fixedit.fixitadmin.Utils.NotificationObserver;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,6 +69,7 @@ public class ModifyOrder extends AppCompatActivity implements NotificationObserv
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         parentService = getIntent().getStringExtra("parentService");
         this.setTitle(parentService);
@@ -201,7 +203,7 @@ public class ModifyOrder extends AppCompatActivity implements NotificationObserv
 
 
     private void getParentServiceFromDB() {
-        mDatabase.child("Services").child(parentService).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("ServicesList").child(SharedPrefs.getVendorModel().getCity()).child(parentService).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -270,7 +272,7 @@ public class ModifyOrder extends AppCompatActivity implements NotificationObserv
     }
 
     private void getDataFromDB() {
-        mDatabase.child("SubServices").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("SubServices").child(SharedPrefs.getVendorModel().getCity()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {

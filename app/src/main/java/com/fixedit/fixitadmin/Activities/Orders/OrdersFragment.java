@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.fixedit.fixitadmin.Models.OrderModel;
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
 import com.fixedit.fixitadmin.Utils.NotificationAsync;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -152,7 +155,7 @@ public class OrdersFragment extends Fragment {
                                 adapter.notifyDataSetChanged();
                                 NotificationAsync notificationAsync = new NotificationAsync(context);
                                 String notification_title = "You order has been cancelled ";
-                                String notification_message = "Reason: "+input.getText().toString();
+                                String notification_message = "Reason: " + input.getText().toString();
                                 notificationAsync.execute("ali", order.getUser().getFcmKey(), notification_title, notification_message, "Order", "abc");
 
                             }
@@ -195,22 +198,25 @@ public class OrdersFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         OrderModel model = snapshot.getValue(OrderModel.class);
                         if (model != null) {
-                            if (model.getOrderStatus().equalsIgnoreCase(orderStatus)) {
-                                arrayList.add(model);
-                                Collections.sort(arrayList, new Comparator<OrderModel>() {
-                                    @Override
-                                    public int compare(OrderModel listData, OrderModel t1) {
-                                        Long ob1 = listData.getTime();
-                                        Long ob2 = t1.getTime();
+                            if (model.getVendor() != null && model.getVendor().equalsIgnoreCase(SharedPrefs.getVendorModel().getUsername())) {
+                                if (model.getOrderStatus().equalsIgnoreCase(orderStatus)) {
+                                    arrayList.add(model);
 
-                                        return ob2.compareTo(ob1);
 
-                                    }
-                                });
-
+                                }
                             }
                         }
                     }
+                    Collections.sort(arrayList, new Comparator<OrderModel>() {
+                        @Override
+                        public int compare(OrderModel listData, OrderModel t1) {
+                            Long ob1 = listData.getTime();
+                            Long ob2 = t1.getTime();
+
+                            return ob2.compareTo(ob1);
+
+                        }
+                    });
                     adapter.notifyDataSetChanged();
                 } else {
                     arrayList.clear();

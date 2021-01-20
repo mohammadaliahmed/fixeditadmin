@@ -2,8 +2,10 @@ package com.fixedit.fixitadmin.Servicemen;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +37,7 @@ public class ServicemanListAdapter extends RecyclerView.Adapter<ServicemanListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.sub_service_item_layout, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.service_man_item_layout, viewGroup, false);
         ServicemanListAdapter.ViewHolder viewHolder = new ServicemanListAdapter.ViewHolder(view);
 
         return viewHolder;
@@ -46,12 +48,7 @@ public class ServicemanListAdapter extends RecyclerView.Adapter<ServicemanListAd
         final ServicemanModel model = itemlist.get(i);
         holder.name.setText(model.getName());
         holder.role.setText(model.getRole());
-        if (model.getImageUrl() != null || !model.getImageUrl().equalsIgnoreCase("")) {
-            Glide.with(context).load(model.getImageUrl()).into(holder.image);
-        } else {
-            Glide.with(context).load(R.drawable.ic_profile_plc).into(holder.image);
-
-        }
+        Glide.with(context).load(model.getImageUrl()).placeholder(R.drawable.ic_profile_plc).into(holder.image);
 
 
         if (model.isActive()) {

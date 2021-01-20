@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.fixedit.fixitadmin.R;
 import com.fixedit.fixitadmin.Utils.CommonUtils;
+import com.fixedit.fixitadmin.Utils.SharedPrefs;
 import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +46,7 @@ public class AddCoupon extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Add Coupon");
 
@@ -120,7 +122,7 @@ public class AddCoupon extends AppCompatActivity {
 
         }
 
-        mDatabase.child("Coupons").child(id).updateChildren(map)
+        mDatabase.child("Coupons").child(SharedPrefs.getVendorModel().getCity()).child(id).updateChildren(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -131,7 +133,7 @@ public class AddCoupon extends AppCompatActivity {
     }
 
     private void getDataFromDB() {
-        mDatabase.child("Coupons").child(id).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("Coupons").child(SharedPrefs.getVendorModel().getCity()).child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -166,7 +168,7 @@ public class AddCoupon extends AppCompatActivity {
                 couponEndTime
 
         );
-        mDatabase.child("Coupons").child(couponName.getText().toString()).setValue(serviceModel)
+        mDatabase.child("Coupons").child(SharedPrefs.getVendorModel().getCity()).child(couponName.getText().toString()).setValue(serviceModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
