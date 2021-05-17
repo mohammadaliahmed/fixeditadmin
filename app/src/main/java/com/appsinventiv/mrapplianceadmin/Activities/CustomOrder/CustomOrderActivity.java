@@ -111,7 +111,16 @@ public class CustomOrderActivity extends AppCompatActivity {
                 } else if (timeSelected == null) {
                     CommonUtils.showToast("Please select date and time ");
                 } else {
-                    registerUser();
+                    String[] fullname = name.getText().toString().split(" ");
+                    try {
+                        String abc = fullname[1];
+                        registerUser();
+                    } catch (Exception e) {
+                        CommonUtils.showToast("Please enter full name");
+                        name.requestFocus();
+                        name.setError("Enter full name");
+                    }
+
                 }
             }
         });
@@ -167,7 +176,7 @@ public class CustomOrderActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String key = snapshot.getKey();
-                        if (key.contains(CommonUtils.getFormattedDateOnly(System.currentTimeMillis()))) {
+                        if (key.contains(CommonUtils.getFormattedDateOnlyy(System.currentTimeMillis()))) {
                             orderId = Long.parseLong(key) + 1;
                         } else {
                             orderId = Long.parseLong(CommonUtils.getFormattedDateOnlyy(System.currentTimeMillis()) + String.format("%03d", 1));
@@ -189,6 +198,7 @@ public class CustomOrderActivity extends AppCompatActivity {
 
     private void registerUser() {
         wholeLayout.setVisibility(View.VISIBLE);
+
         user = new User(
 
                 name.getText().toString().split(" ")[0],
@@ -241,6 +251,7 @@ public class CustomOrderActivity extends AppCompatActivity {
                             i.putExtra("orderId", "" + orderId);
                             startActivity(i);
                             wholeLayout.setVisibility(View.GONE);
+                            finish();
                         }
 
                     });
@@ -291,10 +302,11 @@ public class CustomOrderActivity extends AppCompatActivity {
         addTime();
 
         daySelected = CommonUtils.getDay(System.currentTimeMillis()) + CommonUtils.getDayName(System.currentTimeMillis()).toLowerCase();
-        getValue=CommonUtils.getMonthName(System.currentTimeMillis())+daySelected;
+        getValue = CommonUtils.getMonthName(System.currentTimeMillis()) + daySelected;
 
 
         calender.setMinDate(System.currentTimeMillis() - 1000);
+        monthSelected=CommonUtils.getMonthName(System.currentTimeMillis());
         calender.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -303,7 +315,7 @@ public class CustomOrderActivity extends AppCompatActivity {
                 addTime();
                 monthSelected = CommonUtils.getMonthNameAbbr(month);
                 daySelected = dayOfMonth + CommonUtils.getNameOfDay(year, month + 1, dayOfMonth).toLowerCase();
-                getValue=CommonUtils.getMonthNameAbbr(month)+daySelected;
+                getValue = CommonUtils.getMonthNameAbbr(month) + daySelected;
 
                 timeslotsAdapter.setavailableTime(timeList);
                 ArrayList<String> list = map.get(getValue) == null ? new ArrayList<String>() : map.get(getValue);
@@ -312,6 +324,7 @@ public class CustomOrderActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void addTime() {
         timeList.add("10:00 am");
