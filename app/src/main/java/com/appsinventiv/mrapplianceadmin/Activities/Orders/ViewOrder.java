@@ -23,6 +23,7 @@ import com.appsinventiv.mrapplianceadmin.Activities.OrderLogs.SolutionTracking;
 import com.appsinventiv.mrapplianceadmin.Activities.ViewInvoice;
 import com.appsinventiv.mrapplianceadmin.Activities.ViewQuotation;
 import com.appsinventiv.mrapplianceadmin.Activities.ViewServicePictures;
+import com.appsinventiv.mrapplianceadmin.Adapters.PicturesAdapter;
 import com.appsinventiv.mrapplianceadmin.Models.InvoiceModel;
 import com.appsinventiv.mrapplianceadmin.Models.LogsModel;
 import com.appsinventiv.mrapplianceadmin.Models.OrderModel;
@@ -76,6 +77,8 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
 
     TextView instructions;
     Button orderLogs, quotation;
+    RecyclerView clientPictures;
+    PicturesAdapter picturesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
 
 
         quotation = findViewById(R.id.quotation);
+        clientPictures = findViewById(R.id.clientPictures);
         orderLogs = findViewById(R.id.orderLogs);
         reAssign = findViewById(R.id.reAssign);
         instructions = findViewById(R.id.instructions);
@@ -118,7 +122,7 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
         city = findViewById(R.id.ship_city);
         day = findViewById(R.id.day);
         timeChosen = findViewById(R.id.timeChosen);
-
+        clientPictures.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         orderLogs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,6 +294,15 @@ public class ViewOrder extends AppCompatActivity implements NotificationObserver
                         list = model.getCountModelArrayList();
                         adapter = new OrderedServicesAdapter(ViewOrder.this, list);
                         recyclerView.setAdapter(adapter);
+                        if (model.getOrderImages() != null && model.getOrderImages().size() > 0) {
+                            picturesAdapter = new PicturesAdapter(ViewOrder.this, model.getOrderImages(), new PicturesAdapter.PicturesAdapterCallback() {
+                                @Override
+                                public void onDelete(int position) {
+
+                                }
+                            });
+                            clientPictures.setAdapter(picturesAdapter);
+                        }
 
 
                         if (model.getOrderStatus().equalsIgnoreCase("Pending")) {

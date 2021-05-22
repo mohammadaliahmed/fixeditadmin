@@ -45,6 +45,7 @@ public class OrderModel {
 
     double endJourneyLat,endJourneyLng,startJourneyLat,startJourneyLng;
     boolean customOrder;
+    ArrayList<String> orderImages;
 
 
     public OrderModel(long orderId,
@@ -77,6 +78,13 @@ public class OrderModel {
     }
 
 
+    public ArrayList<String> getOrderImages() {
+        return orderImages;
+    }
+
+    public void setOrderImages(ArrayList<String> orderImages) {
+        this.orderImages = orderImages;
+    }
 
     public boolean isCustomOrder() {
         return customOrder;
